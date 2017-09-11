@@ -1,0 +1,78 @@
+Release Notes:
+
+ * This software was developed for the University of Technology (UTS), Sydney course
+   Advanced Internet Programming (AIP) at semester Spring 2017.
+
+ * The following people contributed to this software (listed alphabetically):
+   - Abid Arain
+   - Cam Van Huynh
+   - Sushmita Mondal
+
+ * Last build update: 27 August 2017
+
+
+Installation / Development Instructions:
+
+ * This software was built using the MEAN stack (MongoDB->ExpressJS->AngularJS->NodeJS)
+
+ * For detailed instructions on how to install the MEAN stack, refer to the following
+   websites:
+   - Linux Ubuntu:
+     > Node: https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-
+       distributions
+     > Express: http://expressjs.com/en/starter/installing.html
+     > Mongo: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+   - Windows:
+     > Node: https://nodejs.org/dist/v6.11.2/node-v6.11.2-x86.msi
+     > Express: http://expressjs.com/en/starter/installing.html
+     > Mongo: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+
+ * To develop and debug locally, perform the following steps:
+   - If not running already, set the MongoDB server to run on the local machine
+     > e.g. on Ubuntu, execute the command "sudo service mongod start"
+   - Execute nodejs for the javascript file server.js, this will set the local machine to
+     listen for incoming traffic on port 3009
+   - Open all .html and .js files using any text editor and modify the code to suit
+   - To debug, run the URL localhost:3009 on any internet web browser in debug mode and view
+     the console logs to diagnose
+
+
+Unit Test Code:
+
+ * TBD...
+
+
+Coding Reference Guide:
+
+ * The following coding rules are applied and adhered to for each development iteration:
+   - Blocks of code will include the opening parenthesis and braces at the end of the
+     instigating line, followed by indented lines
+   - All indentation resulting from code blocks will be an increase of two whitespaces
+   - All closing parentheses and braces to blocks of code will be in a new line subsequent
+     to the final statement of the code block
+   - No tab spaces will be used for this code
+   - No code file will responsible for anything that is logically outside the scope of the
+     subject file
+   - All source files (HTML, JS or other) will contain comments at the beginning of the file
+   - All code blocks will be preceded by a comment line briefly explaining the functionality
+     of the block. These comments will be preceded by an empty line.
+   - No line of code will exceed 80 characters of length
+   - Lines of code exceeding 80 characters will be start a new line with an indentation
+     level of two white spaces
+   - Database records and attributes will be defined in lowercase, with variable types
+     specified in camel case e.g. "type: String"
+   - Abbreviations to variable names will only be used if it is discernable what the
+     variable represents. In the absence of clarity, the variable will be commented
+   - Functions with empty blocks will be written in one line
+   - Horizontal alignment of definitions is only permitted if consistent across the file
+   - Comments spanning two lines will be expressed as two single-line comments.
+   - Comments spanning more than two lines will be expressed as a multiline comment.
+   - Parameter definitions and calls will be separated by a comma followed by a whitespace
+     on the same line.
+   - There will be no commented code within any code file.
+   - Naming convention:
+    * Package name: lowerCamelCase
+    * Class name: Class, interface, record, and typedef names are written in UpperCamelCase
+    * Method name: lowerCamelCase
+    * Constant names use CONSTANT_CASE: all uppercase letters, use underscores to separate words
+    * Parameter name: lowerCamelCase

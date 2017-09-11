@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html ng-app="profileApp">
+  <head>
+    <title>Profile Management</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.angularjs.org/1.2.13/angular.js"></script>
+    <script src="https://code.angularjs.org/1.2.13/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="scripts/app.js"></script>
+  </head>
+  <body ng-controller="ProfileController as vm">
+    <div class="container">
+      <h2 class="text-center">Profile Management</h2>
+      <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()">
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">Name</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" name="name" id="name"
+                   required placeholder="Name" ng-model="vm.formProfile.name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-6">
+            <input type="email" class="form-control" name="email" id="email"
+                   required placeholder="Email"  ng-model="vm.formProfile.email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="gender" class="col-sm-2 control-label">Gender</label>
+          <div class="col-sm-6">
+            <input type="radio" ng-model="vm.formProfile.gender" value="Male" ng-checked="true">
+            <label> Male</label>
+            <br />
+            <input type="radio" ng-model="vm.formProfile.gender" value="Female">
+            <label> Female </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="age" class="col-sm-2 control-label">Age</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" name="age" id="age"
+                   required placeholder="Age"  ng-model="vm.formProfile.age"
+            min="16" max="120">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-10">
+            <button type="button" class="btn btn-default" ng-click="vm.clear()">Clear</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+      <div class="col-sm-6">
+        <h3>Profile List version 2</h3>
+        <table class="table table-hover table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="profile in vm.profiles">
+            <td>
+              {{profile.name}}
+            </td>
+            <td>
+              {{profile.email}}
+            </td>
+            <td>
+              {{profile.gender}}
+            </td>
+            <td>
+              {{profile.age}}
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>
+              <button type="button" class="btn btn-danger" ng-click="vm.delete($index)">Delete</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
