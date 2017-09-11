@@ -69,7 +69,7 @@ Coding Reference Guide:
    - Comments spanning more than two lines will be expressed as a multiline comment.
    - Parameter definitions and calls will be separated by a comma followed by a whitespace
      on the same line.
-   - There will be no commented code within any code file.
+   - There will be no commented code within any code file
    - Naming convention:
     * Package name: lowerCamelCase
     * Class name: Class, interface, record, and typedef names are written in UpperCamelCase
