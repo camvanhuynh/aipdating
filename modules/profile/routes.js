@@ -1,7 +1,17 @@
 //This javascript file is responsible for controlling the handling of transfer
 //between client and server
 
-var Profile = require('./models/profile');
+var Profile = require('./models/profile'),
+    AuthenticationController = require('./controllers/authentication'),
+    express = require('express'),
+    passport = require('passport'),
+    passportService = require('../../config/passport');
+
+// requireAuth = passport.authentication('jwt',{ session:false });
+//var  requireLogin = passport.authentication('local', { session:false });
+
+const requireAuth = passport.authenticate('jwt', { session: false });
+const requireLogin = passport.authenticate('local', { session: false });
 
 module.exports = function(app) {
 
@@ -16,7 +26,7 @@ module.exports = function(app) {
   });
 
   //Adding the profile to the list
-  app.post('/api/profile/add', function(req, res) {
+  app.post('/api/profile/add' ,function(req, res) {
     var profile = new Profile(req.body);
     profile.save(function(err, insertedProfile) {
       if(err) {
@@ -59,4 +69,11 @@ module.exports = function(app) {
       }
     );
   });
+
+  //Login Route
+  app.post('/login', requireLogin, AuthenticationController.login);
+
+  //Registration Route
+  app.post('/register', AuthenticationController.register);
+
 };

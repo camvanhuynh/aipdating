@@ -10,11 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
+    "crypto": "^1.0.1",
     "express": "^4.15.3",
-    "mongoose": "^4.11.7"
+    "jsonwebtoken": "^8.0.1",
+    "mongoose": "^4.11.7",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0",
+    "passport-local": "^1.0.0"
   },
-
   "devDependencies": {
     "request": "^2.81.0",
     "tape": "^4.7.0"
@@ -28,5 +33,4 @@
     "heroku",
     "express"
   ]
-
 }

@@ -19,7 +19,7 @@ app.use(express.static('public'));
 
 //Wrap the app module located within the config subdirectory for handling client
 //requests.
-require('./config')(app);
+require('./config').run(app);
 
 //Execution of the server: continuously listen on the defined port.
 app.listen(app.get('port'), function() {
