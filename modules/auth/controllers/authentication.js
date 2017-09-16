@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const User = require('../models/profile');
+const User = require('../../profile/models/profile');
 
 //const getRole = require('../helpers').getRole;
 const config = require('../../../config/');

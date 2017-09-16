@@ -16,10 +16,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(express.static('client'));
+
+app.use('/api/profile', require('./modules/profile/routes'));
+app.use('/auth', require('./modules/auth/routes'));
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+app.use(function(req, res, next) {
+  res.redirect('/');
+});
 
 //Wrap the app module located within the config subdirectory for handling client
 //requests.
-require('./config').run(app);
+require('./config').run();
 
 //Execution of the server: continuously listen on the defined port.
 app.listen(app.get('port'), function() {

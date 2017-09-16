@@ -1,7 +1,7 @@
 //Angular Front-end script file
 
-angular.module('profileApp', [])
-    .controller('ProfileController', function($http) {
+angular.module('aipdatingApp')
+    .controller('ProfileCtrl', function($http) {
         var vm = this;
         vm.formProfile = {};
 
