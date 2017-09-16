@@ -57,11 +57,13 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
       console.log("new user : " + user.email);
       */
       loggedIn(res.user, res.token);
-    });
-  };
+    })
+  }
 
   function register(user) {
+    console.log("calling register");
     return $http.post('/auth/register',user).success(function(res) {
+      console.log("register success");
       loggedIn(res.user, res.token);
     })
   }
@@ -73,8 +75,8 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
   return {
     currentUser: currentUser,
     getToken: getToken,
-    register: register,
     login: login,
+    register: register,
     logout: logout,
   };
 
