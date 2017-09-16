@@ -18,6 +18,10 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
     authorize: true
+  }).when('/register-success', {
+    templateUrl: '/auth/register/register.success.html',
+    //controller: 'RegisterCtrl',
+    //controllerAs: 'vm',
   }).otherwise('/');
 
 
