@@ -14,7 +14,7 @@ const requireLogin = passport.authenticate('local', { session: false });
 
   //Server obtaining the profile information sent by the client
   //so that it can be listed
-router.get('/list', function(req, res) {
+router.get('/list', requireAuth, function(req, res) {
   Profile.find({}, function(err, profiles) {
     if(err)
       res.send(err);
