@@ -18,7 +18,7 @@ vm.login = function () {
   authentication.login(vm.formLogin).error(function (err) {
     alert(err);
   }).then(function() {
-    console.log("login success!");
+    console.log("login success! yay");
     console.log("current user isss newwww: " + authentication.currentUser().name);
     $location.path('profile');
   })

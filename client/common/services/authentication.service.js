@@ -22,7 +22,7 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
 
   };
 
-  //initState();
+  initState();
 
   function currentUser() {
     //console.log("currentUser email: " + user.email);
@@ -33,14 +33,20 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
     return $window.localStorage['token'];
   }
 
-  function loggedIn(token) {
+  function loggedIn(loggedInUser,token) {
     $window.localStorage['token'] = token;
+    user = {
+      _id: loggedInUser._id,
+      email: loggedInUser.email,
+      name: loggedInUser.name,
+      role: loggedInUser.role
+    };
     initState();
   }
 
   function login(candidateUser) {
     return $http.post('/auth/login',candidateUser).success(function(res) {
-      //loggedIn();
+      /*
       console.log(res.user);
       user = {
         _id: res.user._id,
@@ -49,12 +55,14 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
         role: res.user.role
       };
       console.log("new user : " + user.email);
+      */
+      loggedIn(res.user, res.token);
     });
   };
 
   function register(user) {
     return $http.post('/auth/register',user).success(function(res) {
-      loggedIn(res.token);
+      loggedIn(res.user, res.token);
     })
   }
 

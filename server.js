@@ -10,6 +10,7 @@ var express = require('express'),
     app = new express(),
     bodyParser = require('body-parser');
 
+
 app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.static('client'));
 
+require('./config').run();
 app.use('/api/profile', require('./modules/profile/routes'));
 app.use('/auth', require('./modules/auth/routes'));
 
@@ -30,7 +32,7 @@ app.use(function(req, res, next) {
 
 //Wrap the app module located within the config subdirectory for handling client
 //requests.
-require('./config').run();
+
 
 //Execution of the server: continuously listen on the defined port.
 app.listen(app.get('port'), function() {

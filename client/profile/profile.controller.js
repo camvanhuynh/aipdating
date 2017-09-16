@@ -1,11 +1,15 @@
 //Angular Front-end script file
 
 angular.module('aipdatingApp')
-    .controller('ProfileCtrl', function($http) {
+    .controller('ProfileCtrl', function($http, authentication) {
         var vm = this;
         vm.formProfile = {};
 
-        $http.get('/api/profile/list').then(function(res) {
+        $http.get('/api/profile/list', {
+          headers: {
+            Authorization: authentication.getToken()
+          }
+        }).then(function(res) {
             vm.profiles = res.data;
         });
 
