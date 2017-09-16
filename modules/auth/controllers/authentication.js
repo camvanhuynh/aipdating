@@ -74,7 +74,10 @@ exports.register = function (req, res, next) {
     const user = new User({
       email,
       password,
-      name
+      name,
+      gender,
+      age,
+      role
     });
 
     user.save(function(err, user) {

@@ -25,7 +25,8 @@ var ProfileSchema = mongoose.Schema({
 
   //User's gender field
   gender: {
-    type: String
+    type: String,
+    default: ''
     //required: true
   },
 
@@ -33,7 +34,8 @@ var ProfileSchema = mongoose.Schema({
   age: {
     type: Number,
     min: 16,
-    max: 120
+    max: 120,
+    default: ''
     //required: true
   },
 

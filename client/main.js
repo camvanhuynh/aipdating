@@ -17,7 +17,8 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     templateUrl: '/profile/profile.view.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
-    authorize: true
+    //authorize: true
+    adminAuth: true
   }).when('/register-success', {
     templateUrl: '/auth/register/register.success.html',
     //controller: 'RegisterCtrl',
@@ -29,6 +30,16 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   console.log('run is called!!!');
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
     console.log("start routeChangeStart");
+
+    if(to.adminAuth === true) {
+      to.resolve = to.resolve || {};
+      to.resolve.auth = function(authentication) {
+        if (authentication.currentUser().role === 'Admin')
+          return true;
+        throw new AuthorizationError();
+      }
+    }
+
     if(to.authorize === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {
