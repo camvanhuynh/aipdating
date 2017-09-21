@@ -4,8 +4,9 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
 
   function initState() {
     var token = getToken();
-
+    user = null;
     if(token) {
+      console.log("token is not null");
       var payload = token.split('.')[1];
       payload = $window.atob(payload);
       payload = JSON.parse(payload);
@@ -17,6 +18,7 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
           name: payload.name,
           role: payload.role
         };
+        console.log("you are currently logged in");
       };
     };
 
@@ -64,12 +66,15 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
     console.log("calling register");
     return $http.post('/auth/register',user).success(function(res) {
       console.log("register success");
+      console.log("token is: " + res.token);
       loggedIn(res.user, res.token);
     })
   }
 
   function logout() {
+    console.log("logging outttttttttt user");
     $window.localStorage['token'] = "";
+    initState();
   }
 
   return {

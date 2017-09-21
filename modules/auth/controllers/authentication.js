@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const User = require('../../profile/models/profile');
+const User = require('../models/user');
 
 //const getRole = require('../helpers').getRole;
 const config = require('../../../config/');
@@ -33,8 +33,8 @@ exports.register = function (req, res, next) {
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
-  const gender = req.body.gender;
-  const age = req.body.age;
+  //const gender = req.body.gender;
+  //const age = req.body.age;
   const role = req.body.role;
 
   // Error for empty email
@@ -75,15 +75,13 @@ exports.register = function (req, res, next) {
       email,
       password,
       name,
-      gender,
-      age,
       role
     });
 
     user.save(function(err, user) {
       if (err) { return next(err); }
       const userInfo = setUserInfo(user);
-
+      console.log("User saveddddddd")
       res.status(201).json({
         token: `JWT ${generateToken(userInfo)}`,
         user: userInfo

@@ -1,10 +1,11 @@
 angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $locationProvider) {
   $routeProvider.when('/', {
 
-    templateUrl: '/profile/profile.view.html',
+    templateUrl: '/profile/profile.list.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
     authorize: true
+
   }).when('/login', {
     templateUrl: '/auth/login/login.view.html',
     controller: 'LoginCtrl',
@@ -14,15 +15,25 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     controller: 'RegisterCtrl',
     controllerAs: 'vm',
   }).when('/profile', {
-    templateUrl: '/profile/profile.view.html',
+    templateUrl: '/profile/profile.list.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
     //authorize: true
     adminAuth: true
+  }).when('/profile/user', {
+    templateUrl: '/profile/profile.view.html',
+    //controller: 'ProfileCtrl',
+    controllerAs: 'vm',
+    //authorize: true
+    authorize: true
   }).when('/register-success', {
     templateUrl: '/auth/register/register.success.html',
     //controller: 'RegisterCtrl',
     //controllerAs: 'vm',
+  }).when('/logout', {
+    template: '',
+    controller: 'logoutCtrl',
+    controllerAs: 'vm'
   }).otherwise('/');
 
 
