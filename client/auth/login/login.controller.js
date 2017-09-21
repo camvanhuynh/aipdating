@@ -19,7 +19,7 @@ vm.login = function () {
     alert(err);
   }).then(function() {
     console.log("login success! yay");
-    console.log("current user isss newwww: " + authentication.currentUser().name);
+    console.log("user is just logged in: " + authentication.currentUser().name);
     $location.path('profile');
   })
 }

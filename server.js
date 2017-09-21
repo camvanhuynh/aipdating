@@ -36,5 +36,5 @@ app.use(function(req, res, next) {
 
 //Execution of the server: continuously listen on the defined port.
 app.listen(app.get('port'), function() {
-    console.log(`APIDating is listening on port: ${app.get('port')}`);
+    console.log(`APIDating v2 is listening on port: ${app.get('port')}`);
 });

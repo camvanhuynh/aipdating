@@ -34,8 +34,10 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     if(to.adminAuth === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {
-        if (authentication.currentUser().role === 'Admin')
-          return true;
+        if(authentication.currentUser() != null) {
+          if (authentication.currentUser().role === 'Admin')
+            return true;
+        }
         throw new AuthorizationError();
       }
     }
@@ -70,5 +72,8 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   }
   AuthorizationError.prototype = Object.create(Error.prototype);
   AuthorizationError.prototype.constructor = AuthorizationError;
+
+  //AuthorizationErrorRole.prototype = Object.create(Error.prototype);
+  //AuthorizationErrorRole.prototype.constructor = AuthorizationError;
 
 });
