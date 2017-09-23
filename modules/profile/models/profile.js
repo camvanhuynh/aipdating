@@ -1,17 +1,19 @@
 //Profile schema for MongoDB
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs');
+    //Schema = mongoose.Schema;
 
 var ProfileSchema = mongoose.Schema({
-  //User's name field
-  name: {
-    type: String,
-    unique: true,
+/*
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User',
     required: true
   },
+*/
+  //User's name field
 
-  //User's email address field
-  email: {
+  nickname: {
     type: String,
     unique: true,
     required: true
@@ -20,8 +22,7 @@ var ProfileSchema = mongoose.Schema({
   //User's gender field
   gender: {
     type: String,
-    default: ''
-    //required: true
+    required: true
   },
 
   //User's age field
@@ -29,11 +30,13 @@ var ProfileSchema = mongoose.Schema({
     type: Number,
     min: 16,
     max: 120,
-    default: ''
-    //required: true
+    required: true
   },
 
-
+  interest: {
+    type: String,
+    required: true
+  },
 },
 {
   timestamps: true

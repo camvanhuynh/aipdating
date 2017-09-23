@@ -8,9 +8,11 @@ angular.module('aipdatingApp')
         vm.admin = false;
 
         if(authentication.currentUser().role === "Admin")
-          vm.admin = true;
+           vm.admin = true;
+
 
           vm.currentUser = authentication.currentUser().name;
+          //vm.formProfile.name = authentication.currentUser().name;
 
         console.log("Role isssssss " + vm.admin);
 
@@ -24,10 +26,10 @@ angular.module('aipdatingApp')
 
         vm.clear = function() {
             vm.formProfile = {
-                name: "",
-                email: "",
+                nickname: "",
                 gender: "Male",
                 age: "",
+                interest: "",
                 _id: ""
             };
         }
@@ -37,21 +39,31 @@ angular.module('aipdatingApp')
         vm.submit = function() {
             //Split between Add or Edit operation
             //Add new profile
+
             if(!vm.formProfile._id) {
                 //Check "Male" radio button for default
                 if(vm.formProfile.gender == null){
                     vm.formProfile.gender = "Male";
                 }
-
+/*
                 var newProfile = {
                     name: vm.formProfile.name,
                     email: vm.formProfile.email,
                     gender: vm.formProfile.gender,
                     age: vm.formProfile.age
                 };
-
+*/
+                var newProfile = {
+                    nickname: vm.formProfile.nickname,
+                    gender: vm.formProfile.gender,
+                    age: vm.formProfile.age,
+                    interest: vm.formProfile.interest
+                };
                 //Local view update: push the new item into the local data first
                 vm.profiles.push(newProfile);
+
+                console.log("NEW profile is: ");
+                console.log(newProfile);
 
                 //Database call: then call http.post to add into database
                 $http.post('/api/profile/', newProfile).then(function(res) {
@@ -78,10 +90,10 @@ angular.module('aipdatingApp')
 
                 //Database call: call http.put to update into database
                 $http.put('/api/profile/' + vm.formProfile._id, {
-                    name: vm.formProfile.name,
-                    email: vm.formProfile.email,
-                    gender: vm.formProfile.gender,
-                    age: vm.formProfile.age
+                  nickname: vm.formProfile.nickname,
+                  gender: vm.formProfile.gender,
+                  age: vm.formProfile.age,
+                  interest: vm.formProfile.interest
                 }).then(function(res) { },
                     function(res) {
                         vm.profiles = backup;
@@ -89,7 +101,9 @@ angular.module('aipdatingApp')
             }
 
             //Clear the form after finishing operation
-            vm.clear();
+            //vm.clear();
+
+            vm.isEdit = false;
         }
 
         //This function to delete the item in the database
@@ -109,13 +123,18 @@ angular.module('aipdatingApp')
 
         //This function is used to move the chosen item data into the form
         vm.edit = function(index) {
+            vm.isEdit = true;
             editProfile = vm.profiles[index];
             vm.formProfile = {
-                name: editProfile.name,
-                email: editProfile.email,
-                gender: editProfile.gender,
-                age: editProfile.age,
+                nickname: vm.formProfile.nickname,
+                gender: vm.formProfile.gender,
+                age: vm.formProfile.age,
+                interest: vm.formProfile.interest,
                 _id: editProfile._id
             }
+        }
+
+        vm.close = function() {
+          vm.isEdit = false;
         }
     });

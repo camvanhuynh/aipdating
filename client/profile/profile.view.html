@@ -8,25 +8,21 @@
   <li class="active">Welcome {{vm.currentUser}}</li>
 </ul>
 <a href='#logout'>Log Out</a>
+<!--<button type="button" class="btn btn-default" ng-click="vm.editOwn()" ng-if="!vm.admin">Edit profile</button>-->
 </div>
+
 
 <div class="container">
   <!--<h2 class="text-center">Profile Management</h2>-->
-  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()" ng-if="vm.admin">
+  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()" ng-if="!vm.admin">
     <div class="form-group">
-      <label for="name" class="col-sm-2 control-label">Name</label>
+      <label for="nickname" class="col-sm-2 control-label">Nickname</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" name="name" id="name"
-               required placeholder="Name" ng-model="vm.formProfile.name">
+        <input type="text" class="form-control" name="nickname" id="nickname"
+               required placeholder="Your nickname" ng-model="vm.formProfile.nickname">
       </div>
     </div>
-    <div class="form-group">
-      <label for="email" class="col-sm-2 control-label">Email</label>
-      <div class="col-sm-6">
-        <input type="email" class="form-control" name="email" id="email"
-               required placeholder="Email"  ng-model="vm.formProfile.email">
-      </div>
-    </div>
+
     <div class="form-group">
       <label for="gender" class="col-sm-2 control-label">Gender</label>
       <div class="col-sm-6">
@@ -46,6 +42,13 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="interest" class="col-sm-2 control-label">Interest</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="interest" id="interest"
+               required placeholder="Your interest"  ng-model="vm.formProfile.interest">
+      </div>
+    </div>
+    <div class="form-group">
       <div class="col-sm-offset-4 col-sm-10">
         <button type="button" class="btn btn-default" ng-click="vm.clear()">Clear</button>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -57,26 +60,26 @@
     <table class="table table-hover table-bordered table-striped">
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
+        <th>Nickname</th>
         <th>Gender</th>
         <th>Age</th>
+        <th>Interest</th>
         <th></th>
       </tr>
       </thead>
       <tbody>
       <tr ng-repeat="profile in vm.profiles">
         <td>
-          {{profile.name}}
-        </td>
-        <td>
-          {{profile.email}}
+          {{profile.nickname}}
         </td>
         <td>
           {{profile.gender}}
         </td>
         <td>
           {{profile.age}}
+        </td>
+        <td>
+          {{profile.interest}}
         </td>
         <td ng-if="vm.admin">
           <button ng-if="vm.admin" type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>

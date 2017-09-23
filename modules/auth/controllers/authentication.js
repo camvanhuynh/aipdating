@@ -16,7 +16,7 @@ const setUserInfo = function (user) {
 
 //Token is generated and expired in 2 days
 function generateToken(user) {
-  return jwt.sign(user, config.secret, { expiresIn: 60});
+  return jwt.sign(user, config.secret, { expiresIn: 86400});
 }
 
 exports.login = function (req, res, next) {
@@ -36,6 +36,7 @@ exports.register = function (req, res, next) {
   //const gender = req.body.gender;
   //const age = req.body.age;
   const role = req.body.role;
+
 
   // Error for empty email
   if (!email) {

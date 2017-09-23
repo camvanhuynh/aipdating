@@ -25,10 +25,19 @@ router.get('/', requireAuth, function(req, res) {
 //Adding the profile to the list
 router.post('/' ,function(req, res) {
   console.log("POST is CALLLING");
-  var profile = new Profile(req.body);
+
+  var profile = new Profile({
+    nickname: req.body.nickname,
+    gender: req.body.gender,
+    age: req.body.age,
+    interest: req.body.interest,
+  });
+
   console.log(profile);
+
   profile.save(function(err, insertedProfile) {
     if(err) {
+      console.log("ERRORRRRRRR is " + err);
       return res.status(400).send({
         message: err
       })
