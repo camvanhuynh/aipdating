@@ -16,7 +16,7 @@ const setUserInfo = function (user) {
 
 //Token is generated and expired in 2 days
 function generateToken(user) {
-  return jwt.sign(user, config.secret, { expiresIn: 172800});
+  return jwt.sign(user, config.secret, { expiresIn: 60});
 }
 
 exports.login = function (req, res, next) {

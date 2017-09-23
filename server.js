@@ -8,11 +8,13 @@
 var express = require('express'),
     path = require('path'),
     app = new express(),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    logger = require('morgan');
 
 
 app.set('port', (process.env.PORT || 5000));
 
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 app.use(bodyParser.urlencoded({ extended: true }));

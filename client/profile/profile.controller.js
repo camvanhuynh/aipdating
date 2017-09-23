@@ -3,9 +3,18 @@
 angular.module('aipdatingApp')
     .controller('ProfileCtrl', function($http, authentication) {
         var vm = this;
-        vm.formProfile = {};
 
-        $http.get('/api/profile/list', {
+        vm.formProfile = {};
+        vm.admin = false;
+
+        if(authentication.currentUser().role === "Admin")
+          vm.admin = true;
+
+          vm.currentUser = authentication.currentUser().name;
+
+        console.log("Role isssssss " + vm.admin);
+
+        $http.get('/api/profile/', {
           headers: {
             Authorization: authentication.getToken()
           }
@@ -45,7 +54,7 @@ angular.module('aipdatingApp')
                 vm.profiles.push(newProfile);
 
                 //Database call: then call http.post to add into database
-                $http.post('/api/profile/add', newProfile).then(function(res) {
+                $http.post('/api/profile/', newProfile).then(function(res) {
                         vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
                     },
 
@@ -68,7 +77,7 @@ angular.module('aipdatingApp')
                 });
 
                 //Database call: call http.put to update into database
-                $http.put('/api/profile/' + vm.formProfile._id + "/edit", {
+                $http.put('/api/profile/' + vm.formProfile._id, {
                     name: vm.formProfile.name,
                     email: vm.formProfile.email,
                     gender: vm.formProfile.gender,
@@ -91,7 +100,7 @@ angular.module('aipdatingApp')
             vm.profiles = vm.profiles.filter(function(profile, profileIndex) {
                 return index !== profileIndex;
             });
-            $http.delete('/api/profile/'+ deleteId + '/delete').then(function(res) {
+            $http.delete('/api/profile/'+ deleteId).then(function(res) {
             }, function(res) {
                 //If fail to update, roll back
                 vm.profiles = backup;

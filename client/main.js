@@ -1,11 +1,10 @@
 angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $locationProvider) {
   $routeProvider.when('/', {
 
-    templateUrl: '/profile/profile.list.html',
+    templateUrl: '/profile/profile.view.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
     authorize: true
-
   }).when('/login', {
     templateUrl: '/auth/login/login.view.html',
     controller: 'LoginCtrl',
@@ -15,16 +14,9 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     controller: 'RegisterCtrl',
     controllerAs: 'vm',
   }).when('/profile', {
-    templateUrl: '/profile/profile.list.html',
+    templateUrl: '/profile/profile.view.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
-    //authorize: true
-    adminAuth: true
-  }).when('/profile/user', {
-    templateUrl: '/profile/profile.view.html',
-    //controller: 'ProfileCtrl',
-    controllerAs: 'vm',
-    //authorize: true
     authorize: true
   }).when('/register-success', {
     templateUrl: '/auth/register/register.success.html',
@@ -41,7 +33,7 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   console.log('run is called!!!');
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
     console.log("start routeChangeStart");
-
+/*
     if(to.adminAuth === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {
@@ -52,7 +44,7 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
         throw new AuthorizationError();
       }
     }
-
+*/
     if(to.authorize === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {

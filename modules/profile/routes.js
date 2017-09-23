@@ -14,7 +14,7 @@ const requireLogin = passport.authenticate('local', { session: false });
 
   //Server obtaining the profile information sent by the client
   //so that it can be listed
-router.get('/list', requireAuth, function(req, res) {
+router.get('/', requireAuth, function(req, res) {
   Profile.find({}, function(err, profiles) {
     if(err)
       res.send(err);
@@ -23,8 +23,10 @@ router.get('/list', requireAuth, function(req, res) {
 });
 
 //Adding the profile to the list
-router.post('/add' ,function(req, res) {
+router.post('/' ,function(req, res) {
+  console.log("POST is CALLLING");
   var profile = new Profile(req.body);
+  console.log(profile);
   profile.save(function(err, insertedProfile) {
     if(err) {
       return res.status(400).send({
@@ -38,7 +40,7 @@ router.post('/add' ,function(req, res) {
 });
 
 //Removing the profile from the list
-router.delete('/:profileId/delete', function(req, res) {
+router.delete('/:profileId', function(req, res) {
   Profile.remove({ _id: req.params.profileId}, function(err,result) {
     if(err) {
       return res.status(400).send({
@@ -50,7 +52,7 @@ router.delete('/:profileId/delete', function(req, res) {
 });
 
 //Editing the existing profile
-router.put('/:profileId/edit', function(req, res) {
+router.put('/:profileId', function(req, res) {
   Profile.update(
     {
       _id: req.params.profileId
