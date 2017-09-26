@@ -123,13 +123,14 @@ angular.module('aipdatingApp')
 
         //This function is used to move the chosen item data into the form
         vm.edit = function(index) {
+          console.log("vm edit is call");
             vm.isEdit = true;
             editProfile = vm.profiles[index];
             vm.formProfile = {
-                nickname: vm.formProfile.nickname,
-                gender: vm.formProfile.gender,
-                age: vm.formProfile.age,
-                interest: vm.formProfile.interest,
+                nickname: editProfile.nickname,
+                gender: editProfile.gender,
+                age: editProfile.age,
+                interest: editProfile.interest,
                 _id: editProfile._id
             }
         }

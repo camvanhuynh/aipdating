@@ -14,7 +14,7 @@
 
 <div class="container">
   <!--<h2 class="text-center">Profile Management</h2>-->
-  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()" ng-if="!vm.admin">
+  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()">
     <div class="form-group">
       <label for="nickname" class="col-sm-2 control-label">Nickname</label>
       <div class="col-sm-6">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="interest" class="col-sm-2 control-label">Interest</label>
+      <label for="interest" class="col-sm-2 control-label">Interests</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" name="interest" id="interest"
                required placeholder="Your interest"  ng-model="vm.formProfile.interest">
@@ -81,9 +81,9 @@
         <td>
           {{profile.interest}}
         </td>
-        <td ng-if="vm.admin">
-          <button ng-if="vm.admin" type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>
-          <button ng-if="vm.admin" type="button" class="btn btn-danger" ng-click="vm.delete($index)">Delete</button>
+        <td >
+          <button type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>
+          <button type="button" class="btn btn-danger" ng-click="vm.delete($index)">Delete</button>
         </td>
       </tr>
       </tbody>
