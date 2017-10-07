@@ -4,24 +4,12 @@ var mongoose = require('mongoose'),
     //Schema = mongoose.Schema;
 
 var ProfileSchema = mongoose.Schema({
-/*
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User',
-    required: true
-  },
-*/
+
   //User's name field
 
   nickname: {
     type: String,
     unique: true,
-    required: true
-  },
-
-  //User's gender field
-  gender: {
-    type: String,
     required: true
   },
 
@@ -34,6 +22,22 @@ var ProfileSchema = mongoose.Schema({
   },
 
   interest: {
+    type: String,
+    required: true
+  },
+  
+  suburb: {
+    type: String,
+    required: true
+  },
+  
+  state: {
+    type: String,
+    required: true
+  },
+  
+  //User's gender field
+  gender: {
     type: String,
     required: true
   },

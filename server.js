@@ -9,7 +9,8 @@ var express = require('express'),
     path = require('path'),
     app = new express(),
     bodyParser = require('body-parser'),
-    logger = require('morgan');
+    logger = require('morgan')
+	fs = require('fs');
 
 
 app.set('port', (process.env.PORT || 5000));
@@ -25,8 +26,23 @@ require('./config').run();
 app.use('/api/profile', require('./modules/profile/routes'));
 app.use('/auth', require('./modules/auth/routes'));
 
+// Static weather for the server instance
+var weather = require('weather-js');
+var w = "";
+weather.find({search: 'Sydney, NSW', degreeType: 'C'}, function(err, result) {
+  if(err)
+    console.log(err);
+  w = JSON.stringify(result, null, 2);
+  fs.writeFile('public/weather.json', w, function(err) {
+	  if(err) {
+		  console.log(err);
+	  }
+  });
+});
+
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.send(w);
 });
 app.use(function(req, res, next) {
   res.redirect('/');

@@ -1,18 +1,24 @@
 //Angular Front-end script file
 
 angular.module('aipdatingApp')
-    .controller('ProfileCtrl', function($http, authentication) {
-        var vm = this;
+    .controller('ProfileCtrl', function($http, authentication)
 
-        vm.formProfile = {};
+		// Profile holder
+		var extended = {
+		  nickname: "",
+		  distance: "12",
+		  match: "No",
+		  _id: ""
+		};
+
+        var vm = this;
+        vm.formProfile = [];
         vm.admin = false;
+		vm.profileEval = [];
 
         if(authentication.currentUser().role === "Admin")
-           vm.admin = true;
-
-
+          vm.admin = true;
           vm.currentUser = authentication.currentUser().name;
-          //vm.formProfile.name = authentication.currentUser().name;
 
         console.log("Role isssssss " + vm.admin);
 
@@ -22,14 +28,38 @@ angular.module('aipdatingApp')
           }
         }).then(function(res) {
             vm.profiles = res.data;
+			vm.profileEval = [];
+			for(i = 0; i < vm.profiles.length; i++)
+			  vm.profileEval.push(extended);
         });
+		
+		vm.match() {
+			vm.extendedProfiles.length = 0;
+			
+			for(i = 0; i < vm.profiles.length; i++) {
+				console.log("ABID " + vm.profiles[i].nickname);
+				extended.nickname = vm.profiles[i].nickname;
+				extended._id = vm.profiles[i]._id;
+				
+				// get the distance from the maps web service
+				extended.distance = i.toString();
+				
+				// evaluate the match
+				extended.match = "Maybe";
+				
+				// add to the bound list data
+				vm.profileEval.push(extended);
+			}
+		}
 
         vm.clear = function() {
             vm.formProfile = {
                 nickname: "",
-                gender: "Male",
                 age: "",
                 interest: "",
+				suburb: "",
+				state: "",
+				gender: "Male",
                 _id: ""
             };
         }
@@ -45,23 +75,16 @@ angular.module('aipdatingApp')
                 if(vm.formProfile.gender == null){
                     vm.formProfile.gender = "Male";
                 }
-/*
-                var newProfile = {
-                    name: vm.formProfile.name,
-                    email: vm.formProfile.email,
-                    gender: vm.formProfile.gender,
-                    age: vm.formProfile.age
-                };
-*/
+
                 var newProfile = {
                     nickname: vm.formProfile.nickname,
-                    gender: vm.formProfile.gender,
                     age: vm.formProfile.age,
-                    interest: vm.formProfile.interest
+                    interest: vm.formProfile.interest,
+					suburb: vm.formProfile.suburb,
+					state: vm.formProfile.state,
+					gender: vm.formProfile.gender
                 };
                 //Local view update: push the new item into the local data first
-                vm.profiles.push(newProfile);
-
                 console.log("NEW profile is: ");
                 console.log(newProfile);
 
@@ -91,9 +114,11 @@ angular.module('aipdatingApp')
                 //Database call: call http.put to update into database
                 $http.put('/api/profile/' + vm.formProfile._id, {
                   nickname: vm.formProfile.nickname,
-                  gender: vm.formProfile.gender,
                   age: vm.formProfile.age,
-                  interest: vm.formProfile.interest
+                  interest: vm.formProfile.interest,
+				  suburb: vm.formProfile.suburb,
+				  state: vm.formProfile.state,
+				  gender: vm.formProfile.gender
                 }).then(function(res) { },
                     function(res) {
                         vm.profiles = backup;
@@ -128,9 +153,11 @@ angular.module('aipdatingApp')
             editProfile = vm.profiles[index];
             vm.formProfile = {
                 nickname: editProfile.nickname,
-                gender: editProfile.gender,
                 age: editProfile.age,
+				suburb: editProfile.suburb,
+				state: editProfile.state,
                 interest: editProfile.interest,
+				gender: editProfile.gender,
                 _id: editProfile._id
             }
         }

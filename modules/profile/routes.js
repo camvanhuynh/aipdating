@@ -28,9 +28,11 @@ router.post('/' ,function(req, res) {
 
   var profile = new Profile({
     nickname: req.body.nickname,
-    gender: req.body.gender,
     age: req.body.age,
     interest: req.body.interest,
+	suburb: req.body.suburb,
+	state: req.body.state,
+	gender: req.body.gender
   });
 
   console.log(profile);
