@@ -1,0 +1,6 @@
+{
+  "name": "",
+  "description": "A Dating App using AngularJS and Express",
+  "repository": "https://github.com/camvanhuynh/aipdating.git",
+  "keywords": ["node", "express", "heroku"]
+}
