@@ -1,5 +1,4 @@
 .DS_Store
 node_modules
 .idea
-app.min.js
 app.min.js.map
