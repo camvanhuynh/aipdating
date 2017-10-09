@@ -36,6 +36,12 @@ Installation / Development Instructions:
    - To debug, run the URL localhost:3009 on any internet web browser in debug mode and view
      the console logs to diagnose
 
+Dependencies:
+ * The following following may need to be executed on a terminal prior to testing the software:
+   - npm install
+   - npm update
+   - npm run build
+   - npm install weather-js
 
 Unit Test Code:
 

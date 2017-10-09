@@ -6,7 +6,7 @@ angular.module('aipdatingApp')
 		// Profile holder
 		var extended = {
 		  nickname: "",
-		  distance: "12",
+		  distance: "-",
 		  match: "No",
 		  _id: ""
 		};
