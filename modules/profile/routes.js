@@ -3,17 +3,15 @@
 
 var router = require('express').Router(),
     Profile = require('./models/profile'),
-    passport = require('passport'),
-    passportService = require('../../config/passport');
+    passport = require('../../config/passport');
 
 // requireAuth = passport.authentication('jwt',{ session:false });
 //var  requireLogin = passport.authentication('local', { session:false });
 
 const requireAuth = passport.authenticate('jwt', { session: false });
-const requireLogin = passport.authenticate('local', { session: false });
 
-  //Server obtaining the profile information sent by the client
-  //so that it can be listed
+//Server obtaining the profile information sent by the client
+//so that it can be listed
 router.get('/', requireAuth, function(req, res) {
   Profile.find({}, function(err, profiles) {
     if(err)

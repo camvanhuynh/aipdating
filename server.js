@@ -9,8 +9,8 @@ var express = require('express'),
     path = require('path'),
     app = new express(),
     bodyParser = require('body-parser'),
-    logger = require('morgan')
-	fs = require('fs');
+    logger = require('morgan'),
+    fs = require('fs');
 
 
 app.set('port', (process.env.PORT || 5000));
@@ -33,19 +33,16 @@ weather.find({search: 'Sydney, NSW', degreeType: 'C'}, function(err, result) {
   if(err)
     console.log(err);
   w = JSON.stringify(result, null, 2);
-  fs.writeFile('public/weather.json', w, function(err) {
-	  if(err) {
-		  console.log(err);
-	  }
-  });
+  //fs.writeFile('public/weather.json', w, function(err) {
+	 // if(err) {
+		 // console.log(err);
+	  //}
+  //});
 });
 
-app.get('/', function(req, res) {
+app.use(function(req, res, next) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
   res.send(w);
-});
-app.use(function(req, res, next) {
-  res.redirect('/');
 });
 
 //Wrap the app module located within the config subdirectory for handling client

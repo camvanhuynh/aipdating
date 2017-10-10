@@ -3,11 +3,15 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
   var user = null;
 
   function initState() {
-    var token = getToken();
+    var token;
+    var payload;
+
+    token = getToken();
+
     user = null;
     if(token) {
       console.log("token is not null");
-      var payload = token.split('.')[1];
+      payload = token.split('.')[1];
       payload = $window.atob(payload);
       payload = JSON.parse(payload);
 
@@ -32,11 +36,11 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
   };
 
   function getToken() {
-    return $window.localStorage['token'];
+    return $window.localStorage['aip-token'];
   }
 
   function loggedIn(loggedInUser,token) {
-    $window.localStorage['token'] = token;
+    $window.localStorage['aip-token'] = token;
     user = {
       _id: loggedInUser._id,
       email: loggedInUser.email,
@@ -73,7 +77,7 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
 
   function logout() {
     console.log("logging outttttttttt user");
-    $window.localStorage['token'] = "";
+    $window.localStorage['aip-token'] = "";
     initState();
   }
 

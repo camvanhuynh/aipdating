@@ -2,3 +2,6 @@
 node_modules
 .idea
 app.min.js.map
+app.min.js
+npm-debug.log
+package-lock.json

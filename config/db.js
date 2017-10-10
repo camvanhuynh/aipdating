@@ -2,5 +2,7 @@
 //client-server operations. The mongoose library is used.
 
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://aipdating:vansushabid@aipdating-shard-00-00-r4p1w.mongodb.net:27017,aipdating-shard-00-01-r4p1w.mongodb.net:27017,aipdating-shard-00-02-r4p1w.mongodb.net:27017/test?ssl=true&replicaSet=AIPDating-shard-0&authSource=admin');
-mongoose.connect('mongodb://localhost/aip');
+var dbURL = process.env.MONGODB_URL || 'mongodb://localhost/aip';
+mongoose.connect(dbURL, { useMongoClient: true }, function(err) {
+  err ? console.log('Fail to connect to the database: ', err) : console.log('connected to the database');
+});

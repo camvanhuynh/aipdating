@@ -1,7 +1,7 @@
 //Angular Front-end script file
 
 angular.module('aipdatingApp')
-    .controller('ProfileCtrl', function($http, authentication)
+    .controller('ProfileCtrl', function($http, authentication) {
 
 		// Profile holder
 		var extended = {
@@ -32,36 +32,28 @@ angular.module('aipdatingApp')
 			for(i = 0; i < vm.profiles.length; i++)
 			  vm.profileEval.push(extended);
         });
-		
-		vm.match() {
+
+		vm.match = function() {
 			vm.extendedProfiles.length = 0;
-			
+
 			for(i = 0; i < vm.profiles.length; i++) {
 				console.log("ABID " + vm.profiles[i].nickname);
 				extended.nickname = vm.profiles[i].nickname;
 				extended._id = vm.profiles[i]._id;
-				
+
 				// get the distance from the maps web service
 				extended.distance = i.toString();
-				
+
 				// evaluate the match
 				extended.match = "Maybe";
-				
+
 				// add to the bound list data
 				vm.profileEval.push(extended);
 			}
 		}
 
         vm.clear = function() {
-            vm.formProfile = {
-                nickname: "",
-                age: "",
-                interest: "",
-				suburb: "",
-				state: "",
-				gender: "Male",
-                _id: ""
-            };
+            vm.formProfile = {};
         }
 
         //This function will handle both of ADD and EDIT operation after checking the current
@@ -80,23 +72,24 @@ angular.module('aipdatingApp')
                     nickname: vm.formProfile.nickname,
                     age: vm.formProfile.age,
                     interest: vm.formProfile.interest,
-					suburb: vm.formProfile.suburb,
-					state: vm.formProfile.state,
-					gender: vm.formProfile.gender
+                    suburb: vm.formProfile.suburb,
+                    state: vm.formProfile.state,
+                    gender: vm.formProfile.gender
                 };
                 //Local view update: push the new item into the local data first
                 console.log("NEW profile is: ");
                 console.log(newProfile);
-
+                //optimistic adding
+                vm.profiles.push(newProfile);
                 //Database call: then call http.post to add into database
-                $http.post('/api/profile/', newProfile).then(function(res) {
-                        vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
-                    },
-
-                    function(res) {
-                        //If fail to update, roll back
-                        vm.profiles.pop();
-                    });
+                $http.post('/api/profile/', newProfile).then(
+                  function(res) {
+                    vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
+                  },
+                  function(res) {
+                    //If fail to update, roll back
+                    vm.profiles.pop();
+                  });
             }
             else {
                 //Edit existing profile
@@ -106,7 +99,15 @@ angular.module('aipdatingApp')
                 //Local view update: update the current local data with the new updated item
                 vm.profiles = vm.profiles.map(function(profile) {
                     if(profile._id === vm.formProfile._id) {
-                        return vm.formProfile;
+                        return {
+                          nickname: vm.formProfile.nickname,
+                          age: vm.formProfile.age,
+                          suburb: vm.formProfile.suburb,
+                          state: vm.formProfile.state,
+                          interest: vm.formProfile.interest,
+                          gender: vm.formProfile.gender,
+                          _id: vm.formProfile._id
+                        };
                     }
                     return profile;
                 });
@@ -116,18 +117,21 @@ angular.module('aipdatingApp')
                   nickname: vm.formProfile.nickname,
                   age: vm.formProfile.age,
                   interest: vm.formProfile.interest,
-				  suburb: vm.formProfile.suburb,
-				  state: vm.formProfile.state,
-				  gender: vm.formProfile.gender
-                }).then(function(res) { },
-                    function(res) {
-                        vm.profiles = backup;
-                    });
+                  suburb: vm.formProfile.suburb,
+                  state: vm.formProfile.state,
+                  gender: vm.formProfile.gender
+                }).then(
+                  function(res) {
+                    //successful
+                  },
+                  function(res) {
+                    //error
+                    vm.profiles = backup;
+                  }
+                );
             }
-
             //Clear the form after finishing operation
-            //vm.clear();
-
+            vm.clear();
             vm.isEdit = false;
         }
 
@@ -150,14 +154,14 @@ angular.module('aipdatingApp')
         vm.edit = function(index) {
           console.log("vm edit is call");
             vm.isEdit = true;
-            editProfile = vm.profiles[index];
+            var editProfile = vm.profiles[index];
             vm.formProfile = {
                 nickname: editProfile.nickname,
                 age: editProfile.age,
-				suburb: editProfile.suburb,
-				state: editProfile.state,
+                suburb: editProfile.suburb,
+                state: editProfile.state,
                 interest: editProfile.interest,
-				gender: editProfile.gender,
+                gender: editProfile.gender,
                 _id: editProfile._id
             }
         }

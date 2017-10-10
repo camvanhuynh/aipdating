@@ -17,7 +17,7 @@ gulp.task('scripts', function() {
     }))
     .pipe(sourcemaps.init())
     .pipe(concat('./app.min.js'))
-    .pipe(annotate())
+    //.pipe(annotate())
     /*
         .pipe(uglify({
           mangle: true
