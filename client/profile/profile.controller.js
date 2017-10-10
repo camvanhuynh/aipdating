@@ -3,60 +3,91 @@
 angular.module('aipdatingApp')
     .controller('ProfileCtrl', function($http, authentication) {
 
-		// Profile holder
-    var extended = {
-      nickname: "",
-      distance: "-",
-      match: "No",
-      _id: ""
-    };
+        // Profile holder
+        var vm = this;
 
-    var vm = this;
-    vm.formProfile = [];
-    vm.admin = false;
-    vm.profileEval = [];
-
-    if(authentication.currentUser().role === "Admin")
-      vm.admin = true;
-      vm.currentUser = authentication.currentUser().name;
-
-    console.log("Role isssssss " + vm.admin);
-
-    $http.get('/api/profile/').then(
-      function(res) {
-        vm.profiles = res.data;
-        console.log(vm.profiles);
+        vm.formProfile = {};
         vm.profileEval = [];
-        for(i = 0; i < vm.profiles.length; i++)
-          vm.profileEval.push(extended);
-      },
-      function(err) {
-        console.log(err);
-      }
-    );
+        vm.weather = "Unknown";
+        vm.temperature = "Uknown";
+        vm.admin = false;
+      
+        var extended = {
+          nickname: "",
+          distance: "-",
+          match: "No",
+          _id: ""
+        };
 
-    vm.isOwner = function(profile) {
-      return profile.user === authentication.currentUser()._id
-    }
+        if(authentication.currentUser().role === "Admin")
+           vm.admin = true;
 
-		vm.match = function() {
-			vm.extendedProfiles.length = 0;
 
-			for(i = 0; i < vm.profiles.length; i++) {
-				console.log("ABID " + vm.profiles[i].nickname);
-				extended.nickname = vm.profiles[i].nickname;
-				extended._id = vm.profiles[i]._id;
+        vm.currentUser = authentication.currentUser().name;
 
-				// get the distance from the maps web service
-				extended.distance = i.toString();
+        console.log("Role isssssss " + vm.admin);
 
-				// evaluate the match
-				extended.match = "Maybe";
+        $http.get('/api/profile/', {
+          headers: {
+            Authorization: authentication.getToken()
+          }
+        }).then(function(res) {
+          vm.profiles = res.data;
+          
+          // initialise the default evaluation of matches
+          vm.profileEval = [];
+          for(i = 0; i < vm.profiles.length; i++)
+            vm.profileEval.push(extended);
+        });
 
-				// add to the bound list data
-				vm.profileEval.push(extended);
-			}
-		}
+        // get the current weather from the server
+        $.getJSON('weather.json', {}, function(data) {
+          console.log(data[0]["current"]);  // there's a nice array of info in here
+          vm.weather = data[0]["current"].skytext;
+          vm.temperature = data[0]["current"].temperature;
+        });
+
+        vm.match = function() {
+          var valid = 
+            vm.formProfile.state &&
+            vm.formProfile.age &&
+            vm.formProfile.gender;
+          if(valid) {
+            vm.profileEval = [];
+            
+            for(i = 0; i < vm.profiles.length; i++) {
+              extended.nickname = vm.profiles[i].nickname;
+              extended._id = vm.profiles[i]._id;
+              console.log(vm.profiles[i].gender);
+
+              // [TODO: NEED TO GET THE FOLLOWING FROM THE WEB SERVER - THE BROWSER HATES THIS CODE]
+              // get the distance from the maps web service
+              //var origins = vm.formProfile.suburb.replace(" ", "+") + "," + vm.formProfile.state;
+              //var destinations = vm.profiles[i].suburb.replace(" ", "+") + "," + vm.profiles[i].state;
+              //var url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&" +
+              //  "origins=" + origins + "&destinations=" + destinations;
+              //$.getJSON(url, function(data) {
+              //		console.log(data);
+              //	});
+              extended.distance = "TBD";  // not supported yet
+              
+              // evaluate the match
+              if(vm.formProfile.state != vm.profiles[i].state)
+                extended.match = "Wrong state";
+              else if(vm.formProfile.gender == vm.profiles[i].gender)
+                extended.match = "Wrong gender";
+              else if(Math.abs(vm.formProfile.age - vm.profiles[i].age) > 10)
+                extended.match = "Age gap.";
+              else
+                extended.match = "YES!!!";
+              
+              // add to the bound list data
+              vm.profileEval.push(extended);
+            }
+          }
+          else
+            window.alert("Please fill in the state, age and gender fields.");
+        }
 
         vm.clear = function() {
             vm.formProfile = {};
