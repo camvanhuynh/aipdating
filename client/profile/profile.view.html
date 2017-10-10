@@ -111,7 +111,7 @@
           <td>
             {{vm.profileEval[$index].match}}
           </td>
-          <td >
+          <td ng-if="vm.isOwner(profile)">
             <button type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>
             <button type="button" class="btn btn-danger" ng-click="vm.delete($index)">Delete</button>
           </td>

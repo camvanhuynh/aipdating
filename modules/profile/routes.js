@@ -8,29 +8,55 @@ var router = require('express').Router(),
 // requireAuth = passport.authentication('jwt',{ session:false });
 //var  requireLogin = passport.authentication('local', { session:false });
 
-const requireAuth = passport.authenticate('jwt', { session: false });
+const requireAuth = function(checkOwner = false) {
+  return function(req, res, next) {
+    passport.authenticate(
+      'jwt',
+      { session: false },
+      function(err, user, info) {
+        if(!user) {
+          return res.status(401).end();
+        }
+        if(checkOwner) {
+          Profile.findOne({
+            _id: req.params.profileId
+          }, function(err, profile) {
+            console.log(profile.user);
+            console.log(user._id);
+            if(profile.user.toString() !== user._id.toString()) {
+              return res.status(403).end();
+            }
+          });
+        }
+        req.user = user;
+        next();
+      }
+    )(req, res, next);
+  }
+}
 
 //Server obtaining the profile information sent by the client
 //so that it can be listed
-router.get('/', requireAuth, function(req, res) {
+router.get('/', requireAuth(), function(req, res) {
   Profile.find({}, function(err, profiles) {
     if(err)
-      res.send(err);
+      return res.send(err);
     res.json(profiles);
   });
 });
 
 //Adding the profile to the list
-router.post('/' ,function(req, res) {
+router.post('/' , requireAuth(), function(req, res) {
   console.log("POST is CALLLING");
-
+  //check isOwner
   var profile = new Profile({
     nickname: req.body.nickname,
     age: req.body.age,
     interest: req.body.interest,
-	suburb: req.body.suburb,
-	state: req.body.state,
-	gender: req.body.gender
+    suburb: req.body.suburb,
+    state: req.body.state,
+    gender: req.body.gender,
+    user: req.user
   });
 
   console.log(profile);
@@ -49,7 +75,7 @@ router.post('/' ,function(req, res) {
 });
 
 //Removing the profile from the list
-router.delete('/:profileId', function(req, res) {
+router.delete('/:profileId', requireAuth(true), function(req, res) {
   Profile.remove({ _id: req.params.profileId}, function(err,result) {
     if(err) {
       return res.status(400).send({
@@ -61,7 +87,7 @@ router.delete('/:profileId', function(req, res) {
 });
 
 //Editing the existing profile
-router.put('/:profileId', function(req, res) {
+router.put('/:profileId', requireAuth(true), function(req, res) {
   Profile.update(
     {
       _id: req.params.profileId
@@ -73,7 +99,7 @@ router.put('/:profileId', function(req, res) {
           message: err
         });
       }
-      res.sendStatus(200);
+      res.status(200).end();
     }
   );
 });

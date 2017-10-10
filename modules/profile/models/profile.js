@@ -1,12 +1,10 @@
 //Profile schema for MongoDB
 var mongoose = require('mongoose'),
-    bcrypt = require('bcrypt-nodejs');
-    //Schema = mongoose.Schema;
+    bcrypt = require('bcrypt-nodejs'),
+    Schema = mongoose.Schema;
 
-var ProfileSchema = mongoose.Schema({
-
+var ProfileSchema = Schema({
   //User's name field
-
   nickname: {
     type: String,
     unique: true,
@@ -25,26 +23,31 @@ var ProfileSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  
+
   suburb: {
     type: String,
     required: true
   },
-  
+
   state: {
     type: String,
     required: true
   },
-  
+
   //User's gender field
   gender: {
     type: String,
     required: true
   },
+
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User',
+    required: true
+  }
 },
 {
   timestamps: true
 });
-
 
 module.exports = mongoose.model('Profile', ProfileSchema);

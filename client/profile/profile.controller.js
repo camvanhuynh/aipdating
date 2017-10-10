@@ -4,34 +4,40 @@ angular.module('aipdatingApp')
     .controller('ProfileCtrl', function($http, authentication) {
 
 		// Profile holder
-		var extended = {
-		  nickname: "",
-		  distance: "-",
-		  match: "No",
-		  _id: ""
-		};
+    var extended = {
+      nickname: "",
+      distance: "-",
+      match: "No",
+      _id: ""
+    };
 
-        var vm = this;
-        vm.formProfile = [];
-        vm.admin = false;
-		vm.profileEval = [];
+    var vm = this;
+    vm.formProfile = [];
+    vm.admin = false;
+    vm.profileEval = [];
 
-        if(authentication.currentUser().role === "Admin")
-          vm.admin = true;
-          vm.currentUser = authentication.currentUser().name;
+    if(authentication.currentUser().role === "Admin")
+      vm.admin = true;
+      vm.currentUser = authentication.currentUser().name;
 
-        console.log("Role isssssss " + vm.admin);
+    console.log("Role isssssss " + vm.admin);
 
-        $http.get('/api/profile/', {
-          headers: {
-            Authorization: authentication.getToken()
-          }
-        }).then(function(res) {
-            vm.profiles = res.data;
-			vm.profileEval = [];
-			for(i = 0; i < vm.profiles.length; i++)
-			  vm.profileEval.push(extended);
-        });
+    $http.get('/api/profile/').then(
+      function(res) {
+        vm.profiles = res.data;
+        console.log(vm.profiles);
+        vm.profileEval = [];
+        for(i = 0; i < vm.profiles.length; i++)
+          vm.profileEval.push(extended);
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
+
+    vm.isOwner = function(profile) {
+      return profile.user === authentication.currentUser()._id
+    }
 
 		vm.match = function() {
 			vm.extendedProfiles.length = 0;
@@ -85,11 +91,13 @@ angular.module('aipdatingApp')
                 $http.post('/api/profile/', newProfile).then(
                   function(res) {
                     vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
+                    vm.profiles[vm.profiles.length - 1].user = res.data.profile.user._id;
                   },
                   function(res) {
                     //If fail to update, roll back
                     vm.profiles.pop();
-                  });
+                  }
+                );
             }
             else {
                 //Edit existing profile
@@ -106,6 +114,7 @@ angular.module('aipdatingApp')
                           state: vm.formProfile.state,
                           interest: vm.formProfile.interest,
                           gender: vm.formProfile.gender,
+                          user: vm.formProfile.user,
                           _id: vm.formProfile._id
                         };
                     }
@@ -162,6 +171,7 @@ angular.module('aipdatingApp')
                 state: editProfile.state,
                 interest: editProfile.interest,
                 gender: editProfile.gender,
+                user: editProfile.user,
                 _id: editProfile._id
             }
         }

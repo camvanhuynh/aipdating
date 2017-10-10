@@ -1,6 +1,5 @@
 angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $locationProvider) {
   $routeProvider.when('/', {
-
     templateUrl: '/profile/profile.view.html',
     controller: 'ProfileCtrl',
     controllerAs: 'vm',
@@ -28,9 +27,10 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     controllerAs: 'vm'
   }).otherwise('/');
 
-
-}).run(function($rootScope, $location) {
+}).run(function($rootScope, $location, $http, authentication) {
   console.log('run is called!!!');
+  $http.defaults.headers.common['Authorization'] = authentication.getToken();//$window.localStorage['aip-token'];
+
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
     console.log("start routeChangeStart");
 /*
