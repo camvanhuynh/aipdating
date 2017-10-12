@@ -37,15 +37,16 @@ Installation / Development Instructions:
      the console logs to diagnose
 
 Dependencies:
- * The following following may need to be executed on a terminal prior to testing the software:
+ * The following may need to be executed on a terminal prior to testing the software:
    - npm install
    - npm update
    - npm run build
    - npm install weather-js
+   - npm install node-schedule
 
 Unit Test Code:
 
- * TBD...
+ * [Not provided with this build]
 
 
 Coding Reference Guide:
