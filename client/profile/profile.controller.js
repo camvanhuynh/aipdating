@@ -41,10 +41,10 @@ angular.module('aipdatingApp')
         });
 
         // get the current weather from the server
-        $.getJSON('weather.json', {}, function(data) {
-          console.log(data[0]["current"]);  // there's a nice array of info in here
-          vm.weather = data[0]["current"].skytext;
-          vm.temperature = data[0]["current"].temperature;
+        $http.get('weather.json').then(function(response) {
+          console.log(response['data'][0]['current']);
+          vm.weather = response['data'][0]["current"].skytext;
+          vm.temperature = response['data'][0]["current"].temperature;
         });
 
         vm.match = function() {
