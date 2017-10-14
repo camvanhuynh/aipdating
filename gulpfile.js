@@ -23,7 +23,7 @@ gulp.task('building scripts', function() {
         .pipe(uglify({
           mangle: true
         }))*/
-    .pipe(gulp.dest('./public'))
+    //.pipe(gulp.dest('./public'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public'));
 });

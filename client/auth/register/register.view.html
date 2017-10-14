@@ -6,21 +6,26 @@
       <label for="email" class="col-sm-4 control-label">Email</label>
       <div class="col-sm-4">
         <input name="email" id="email" type="email" class="form-control"
-               required placeholder="Email" ng-model="vm.registrationForm.email">
+               required placeholder="Your email address" ng-model="vm.registrationForm.email" required>
+        <span ng-show="registrationForm.email.$error.email" style="color:red">Please enter a valid email address</span>
       </div>
     </div>
     <div class="form-group">
       <label for="password" class="col-sm-4 control-label">Password</label>
       <div class="col-sm-4">
         <input name="password" id="password" type="password" class="form-control"
-               required placeholder="Password"  ng-model="vm.registrationForm.password">
+               required placeholder="Your password"  ng-model="vm.registrationForm.password" ng-Minlength="3" ng-Maxlength="15" ng-pattern="/^[a-zA-Z0-9#%!*_-]+$/" required>
+
+        <span ng-show="registrationForm.password.$invalid && registrationForm.password.$dirty" style="color:red">Password must be 3-15 character long. Only letters, numbers and the following characters # * % _ - ! are allowed</span>
       </div>
     </div>
     <div class="form-group">
-      <label for="password" class="col-sm-4 control-label">Name</label>
+      <label for="name" class="col-sm-4 control-label">Name</label>
       <div class="col-sm-4">
         <input name="name" id="name" type="text" class="form-control"
-               required placeholder="Username"  ng-model="vm.registrationForm.name">
+               required placeholder="Your first name"  ng-model="vm.registrationForm.name" ng-Maxlength="50" ng-pattern="/^[a-zA-Z]+$/" required>
+        <span ng-show="registrationForm.name.$invalid && registrationForm.name.$dirty" style="color:red">Your name can only contain upper or lowercase letters</span>
+        <span ng-show="registrationForm.name.$error.maxlength" style="color:red">Your name cannot contains more than 50 characters</span>
       </div>
     </div>
     <div class="form-group">
