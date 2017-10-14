@@ -1,50 +1,54 @@
 //Using Passport library for authentication
-const passport = require('passport'),
-      User = require('../modules/auth/models/user'),
-      config = require('../config'),
-      JwtStrategy = require('passport-jwt').Strategy,
-      ExtractJwt = require('passport-jwt').ExtractJwt,
-      LocalStrategy = require('passport-local');
+const passport = require('passport');
+const Local = require('passport-local');
+const JWT = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const User = require('../modules/auth/models/user');
+const config = require('../config');
 
+//Documentation: http://passportjs.org/docs
 
-var localOptions = {
-  usernameField: 'email'
-};
+//Local login with email and password
+passport.use(new Local({usernameField: 'email'},function(email, password, done) {
+  User.findOne({ email: email }, function(err, user) {
+    if (err)
+      return done(err);
 
-var localLogin = new LocalStrategy (localOptions, function(email, password, done) {
-  User.findOne({ email }, function(err, user){
-    if (err) { return done(err); }
-    if (!user) { return done(null, false, { error: 'We don\'t recognize that email. Please Sign Up if you don\'t have an account.' }); }
+    //Email is unregistered
+    if (!user)
+      return done(null, false, { error: config.text.unregisteredEmail });
 
-    user.comparePassword(password, function(err, isMatch) {
-      if (err) { return done(err); }
-      if (!isMatch) { return done(null, false, { error: 'Password is incorrect. Please try again.' }); }
-
+    //
+    user.verifyPassword(password, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+      if (!res) {
+        return done(null, false, { error: config.text.unmatchedPwd });
+      }
       return done(null, user);
     });
   });
-});
+}));
 
 //
-const jwtOptions = {
+const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
   secretOrKey: config.secret
 };
 
-//
-const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
-  User.findById(payload._id, function(err, user) {
-    if (err) { return done(err, false); }
+// token login
+passport.use(new JWT(options, function(payload, done) {
+  User.findOne({ _id: payload._id }, function(err, user) {
+    if (err)
+      return done(err, null);
 
-    if (user) {
-      done(null, user);
-    } else {
-      done(null, false);
+    if (!user) {
+      return done(null, false);
     }
-  });
-});
 
-passport.use(localLogin);
-passport.use(jwtLogin);
+    return done(null, user);
+  });
+}));
 
 module.exports = passport;

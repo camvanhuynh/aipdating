@@ -1,92 +1,92 @@
-angular.module('aipdatingApp').service('authentication', function($http, $window, $timeout) {
+// Authentication service for front-end:
+// Check current status
+// Setup Log in state
 
+angular.module('aipdatingApp').service('authentication', function($http, $window) {
   var user = null;
+  var token = null;
+  var payload = null;
 
-  function initState() {
-    var token;
-    var payload;
-
-    token = getToken();
-
-    user = null;
-    if(token) {
-      console.log("token is not null");
-      payload = token.split('.')[1];
-      payload = $window.atob(payload);
-      payload = JSON.parse(payload);
-
-      if (payload.exp > Date.now() / 1000) {
-        user = {
-          _id: payload._id,
-          email: payload.email,
-          name: payload.name,
-          role: payload.role
-        };
-        console.log("you are currently logged in");
-      };
-    };
-
-  };
-
-  initState();
-
-  function currentUser() {
-    //console.log("currentUser email: " + user.email);
+  function getUser() {
     return user;
   };
 
   function getToken() {
     return $window.localStorage['aip-token'];
+  };
+
+  function isTokenValid(token) {
+    return (token.exp > Date.now() / 1000);
+  };
+
+  function getUserInfo(payload) {
+    return {
+      _id: payload._id,
+      email: payload.email,
+      name: payload.name,
+      role: payload.role
+    }
   }
 
-  function loggedIn(loggedInUser,token) {
+
+  function storeToken(payload, token) {
     $window.localStorage['aip-token'] = token;
-    user = {
-      _id: loggedInUser._id,
-      email: loggedInUser.email,
-      name: loggedInUser.name,
-      role: loggedInUser.role
-    };
-    initState();
+    user = getUserInfo(payload);
+    reset();
+  }
+
+  function clearToken() {
+    $window.localStorage['aip-token'] = "";
+    user = null;
+    reset();
   }
 
   function login(candidateUser) {
-    return $http.post('/auth/login',candidateUser).success(function(res) {
-      /*
-      console.log(res.user);
-      user = {
-        _id: res.user._id,
-        email: res.user.email,
-        name: res.user.name,
-        role: res.user.role
-      };
-      console.log("new user : " + user.email);
-      */
-      loggedIn(res.user, res.token);
-    })
+    return $http.post('/auth/login', candidateUser).then(
+      function(res) {
+        console.log(res);
+        storeToken(res.data.user, res.data.token);
+      },
+      function(err) {
+        alert(err.data.error);
+        //something wrong!
+      }
+    );
   }
 
   function register(user) {
-    console.log("calling register");
-    return $http.post('/auth/register',user).success(function(res) {
-      console.log("register success");
-      console.log("token is: " + res.token);
-      loggedIn(res.user, res.token);
-    })
+    return $http.post('/auth/register',user).then(
+      function(res) {
+        storeToken(res.data.user, res.data.token);
+      },
+      function(err) {
+        //something wrong!
+      }
+    );
   }
 
-  function logout() {
-    console.log("logging outttttttttt user");
-    $window.localStorage['aip-token'] = "";
-    initState();
-  }
+  function reset() {
+    token = getToken();
+    if(token) {
+      payload = token.split('.')[1];
+      payload = $window.atob(payload);
+      payload = JSON.parse(payload);
+
+      if(isTokenValid(payload)) {
+        user = getUserInfo(payload);
+      };
+    };
+    $http.defaults.headers.common['Authorization'] = getToken();
+
+  };
+
+  reset();
 
   return {
-    currentUser: currentUser,
+    currentUser: getUser,
     getToken: getToken,
     login: login,
     register: register,
-    logout: logout,
+    logOut: clearToken,
   };
-
 });

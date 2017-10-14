@@ -28,55 +28,32 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   }).otherwise('/');
 
 }).run(function($rootScope, $location, $http, authentication) {
-  console.log('run is called!!!');
-  $http.defaults.headers.common['Authorization'] = authentication.getToken();//$window.localStorage['aip-token'];
+  $http.defaults.headers.common['Authorization'] = authentication.getToken();
 
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
-    console.log("start routeChangeStart");
-/*
-    if(to.adminAuth === true) {
-      to.resolve = to.resolve || {};
-      to.resolve.auth = function(authentication) {
-        if(authentication.currentUser() != null) {
-          if (authentication.currentUser().role === 'Admin')
-            return true;
-        }
-        throw new AuthorizationError();
-      }
-    }
-*/
+
     if(to.authorize === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {
-        if (authentication.currentUser()){
-            console.log("User is authorized");
+        if (authentication.currentUser()) {
             return true;
         }
-
-        throw new AuthorizationError();
+        throw new AuthenticationError();
       }
     }
-
-  });
-
-  $rootScope.$on('$routeChangeSuccess', function() {
-
   });
 
   $rootScope.$on('$routeChangeError', function(event, current, previous, error) {
-      if (error instanceof AuthorizationError) {
-        $location.path("login");
-      }
+    if (error instanceof AuthenticationError) {
+      $location.path("login");
+    }
   });
 
-  function AuthorizationError(description) {
-    this.message = 'Forbidden';
-    this.description = description || 'User authentication required';
-  }
-  AuthorizationError.prototype = Object.create(Error.prototype);
-  AuthorizationError.prototype.constructor = AuthorizationError;
+  function AuthenticationError() {
+    this.code = 'Authorization Error';
+    this.error = 'User must be authorized to view this content';
+  };
 
-  //AuthorizationErrorRole.prototype = Object.create(Error.prototype);
-  //AuthorizationErrorRole.prototype.constructor = AuthorizationError;
+  AuthenticationError.prototype.constructor = AuthenticationError;
 
 });

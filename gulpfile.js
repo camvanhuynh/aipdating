@@ -1,18 +1,19 @@
 var gulp = require('gulp');
-var watch = require('gulp-watch');
 var sourcemaps = require('gulp-sourcemaps');
-var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var annotate = require('gulp-ng-annotate');
 var plumber = require('gulp-plumber');
+var concat = require('gulp-concat');
 var gutil = require('gulp-util');
+var watch = require('gulp-watch');
 
-gulp.task('scripts', function() {
-  gulp.src(['./client/**/*.js', '!./client/**/*.test.js'])
+
+gulp.task('building scripts', function() {
+  gulp.src(['./client/**/*.js'])
     .pipe(plumber({
       errorHandler: function(err) {
         gutil.beep();
-        console.log(err);
+        //console.log(err);
       }
     }))
     .pipe(sourcemaps.init())
@@ -27,10 +28,11 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('./public'));
 });
 
-gulp.task('watch', function() {
-  watch(['./client/**/*.js', '!./client/**/*.test.js', '!./client/app.min.js'], function() {
-    gulp.start('scripts');
+gulp.task('watching changes', function() {
+  watch(['./client/**/*.js', '!./client/app.min.js'], function() {
+    //gutil.beep();
+    gulp.start('building scripts');
   });
 });
 
-gulp.task('default', ['scripts', 'watch']);
+gulp.task('default', ['building scripts', 'watching changes']);

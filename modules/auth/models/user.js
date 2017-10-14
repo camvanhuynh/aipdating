@@ -6,7 +6,6 @@ var UserSchema = mongoose.Schema({
   //User's name field
   name: {
     type: String,
-    unique: true,
     required: true
   },
 
@@ -28,11 +27,7 @@ var UserSchema = mongoose.Schema({
     type: String,
     enum: ['Member','Admin'],
     default: 'Member'
-  },
-
-  resetPasswordToken: {type: String},
-  resetPasswordExpires: {type: Date}
-
+  }
 },
 {
   timestamps: true
@@ -41,27 +36,27 @@ var UserSchema = mongoose.Schema({
 //Before save profile into database, hash password first
 UserSchema.pre('save', function(next) {
   const user = this;
-        SALT_FACTOR = 5;
+  const saltRound = 5;
 
-  if(!user.isModified('password')) return next();
+  if(!user.isModified('password')) {
+    return next();
+  };
 
-  bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
-    if(err) return next(err);
-
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if(err) return next(err);
-      user.password = hash;
-      next();
-    })
-  })
+  bcrypt.hash(user.password, bcrypt.genSaltSync(saltRound), null, function(err, hash) {
+    if(err)
+      return next(err);
+    user.password = hash;
+    next();
+  });
 });
 
 //Compare password when user enters password to login
-UserSchema.methods.comparePassword = function(enteredPassword, callback) {
-  bcrypt.compare(enteredPassword,this.password, function(err,isMatch) {
-    if(err) return callback(err);
-
-    callback(null,isMatch);
+UserSchema.methods.verifyPassword = function(enteredPassword, callback) {
+  bcrypt.compare(enteredPassword, this.password, function(err, res) {
+    if(err) {
+      return callback(err);
+    }
+    callback(null, res);
   });
 };
 

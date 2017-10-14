@@ -1,5 +1,5 @@
+<!-- View of Profile list -->
 <div class="container-fluid">
-
 <div class="container-fluid">
 <div class="navbar-header">
   <a class="navbar-brand" href="#">AIP Dating</a>
@@ -111,7 +111,7 @@
           <td>
             {{vm.profileEval[$index].match}}
           </td>
-          <td ng-if="vm.isOwner(profile)">
+          <td ng-if="vm.isOwner(profile) || vm.isAdmin">
             <button type="button" class="btn btn-primary" ng-click="vm.edit($index)">Edit</button>
             <button type="button" class="btn btn-danger" ng-click="vm.delete($index)">Delete</button>
           </td>

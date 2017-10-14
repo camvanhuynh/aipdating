@@ -1,10 +1,44 @@
 var router = require('express').Router(),
-    AuthenticationController = require('./controllers/authentication'),
+    AuthenticationController = require('./controllers/authentication.controller'),
     express = require('express'),
+    config = require('../../config'),
     passport = require('../../config/passport');
 
-const checkAuth = passport.authenticate('local', { session: false });
+function checkValidity(user) {
+  var error = '';
+  if(!user.email )
+    error = config.text.emptyEmailError + '\n';
 
+  if(!user.password)
+    error += config.text.emptyPwdError + '\n';
+
+  return error;
+}
+
+const checkAuth = function(req, res, next) {
+  var error = checkValidity(req.body);
+  if(error)
+    return res.status(422).send({ error: error});
+  passport.authenticate(
+    'local',
+    { session: false },
+    function(err, user, info) {
+      if(err) {
+        //system error
+        return res.status(422).send({
+          error: 'System Error'
+        });
+      }
+      if(!user) {
+        return res.status(401).send({
+          error: info.error
+        });
+      }
+      req.user = user;
+      next();
+    }
+  )(req, res, next);
+};
 //Login Route
 router.post('/login', checkAuth, AuthenticationController.login);
 
