@@ -1,3 +1,4 @@
+// Profile controller for Profile CRUD
 var Profile = require('../models/profile');
 
 exports.list = function(req, res) {
@@ -9,6 +10,7 @@ exports.list = function(req, res) {
   });
 };
 
+// One user can create many profiles
 exports.add = function(req, res) {
   var profile = new Profile({
     nickname: req.body.nickname,

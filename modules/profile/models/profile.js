@@ -1,17 +1,15 @@
-//Profile schema for MongoDB
+// Profile schema for user's rofile
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs'),
     Schema = mongoose.Schema;
 
 var ProfileSchema = Schema({
-  //User's name field
   nickname: {
     type: String,
     unique: true,
     required: true
   },
 
-  //User's age field
   age: {
     type: Number,
     min: 16,
@@ -34,12 +32,12 @@ var ProfileSchema = Schema({
     required: true
   },
 
-  //User's gender field
   gender: {
     type: String,
     required: true
   },
 
+  // One profile belongs to only one user
   user: {
     type: Schema.ObjectId,
     ref: 'User',

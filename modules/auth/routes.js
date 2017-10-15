@@ -1,3 +1,4 @@
+// Routing for Authentication
 var router = require('express').Router(),
     AuthenticationController = require('./controllers/authentication.controller'),
     express = require('express'),

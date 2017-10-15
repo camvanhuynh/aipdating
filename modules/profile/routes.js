@@ -1,12 +1,19 @@
+// Routing for Profile RESTful api
 var router = require('express').Router(),
     Profile = require('./models/profile'),
     ProfileController = require('./controllers/profile.controller'),
     config = require('../../config/')
     passport = require('../../config/passport');
 
+/**
+ * This function checks authenticaton for 2 types of request:
+ * checkOwner = false: User of the request does not need to be the owner of the profile (Get and Add)
+ * checkOwner = true: User of the request must be the owner of the profile to process (Edit and Delete)
+ * @return error if error or next to the next waiting function
+ */
 const requireAuth = function(checkOwner = false) {
   return function(req, res, next) {
-    //Verify req.body
+    // Verify req.body
     passport.authenticate(
       'jwt',
       { session: false },
@@ -39,17 +46,16 @@ const requireAuth = function(checkOwner = false) {
   }
 };
 
-//Server obtaining the profile information sent by the client
-//so that it can be listed
+// Server obtaining the profile information sent by the client
 router.get('/', requireAuth(), ProfileController.list);
 
-//Adding the profile to the list
+// Adding the profile to the list
 router.post('/', requireAuth(), ProfileController.add);
 
-//Removing the profile from the list
+// Removing the profile from the list
 router.delete('/:profileId', requireAuth(true), ProfileController.delete);
 
-//Editing the existing profile
+// Editing the existing profile
 router.put('/:profileId', requireAuth(true), ProfileController.update);
 
 module.exports = router;

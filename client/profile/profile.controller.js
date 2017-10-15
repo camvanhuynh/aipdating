@@ -1,5 +1,4 @@
 // Controller of Profile list view
-
 angular.module('aipdatingApp')
     .controller('ProfileCtrl', function($http, authentication, Weather) {
 
@@ -22,13 +21,17 @@ angular.module('aipdatingApp')
     _id: ""
   };
 
+
+  // Check Admin role
   if(authentication.currentUser().role === "Admin")
      vm.isAdmin = true;
 
+  // Get current logged-in user's name
   vm.currentUser = authentication.currentUser().name;
+
   $http.get('/api/profile/').then(function(res) {
     vm.profiles = res.data;
-    // initialise the default evaluation of matches
+    // Initialise the default evaluation of matches
     vm.profileEval = [];
     for(i = 0; i < vm.profiles.length; i++)
       vm.profileEval.push(extended);
@@ -84,14 +87,17 @@ angular.module('aipdatingApp')
     return profile.user === authentication.currentUser()._id
   }
 
-  //This function will handle both of ADD and EDIT operation after checking the current
-  //existing ID
+  /**
+   * This function handles Add and Edit profile
+   * If not existing id in the form -> this is an Add new profile case
+   * otherwise, this is the Edit operation to the current profile of that id
+   * @return none
+   */
   vm.submit = function() {
-    //Split between Add or Edit operation
-    //Add new profile
 
+    // Add new profile
     if(!vm.formProfile._id) {
-      //Check "Male" radio button for default
+      // Check "Male" radio button for default
       if(vm.formProfile.gender == null){
         vm.formProfile.gender = "Male";
       }
@@ -105,26 +111,26 @@ angular.module('aipdatingApp')
         gender: vm.formProfile.gender
       };
 
-      //attempt to add new profile first
+      // Attempt to add new profile first
       vm.profiles.push(newProfile);
-      //Database call: then call http.post to add into database
+      // Database call: then call http.post to add into database
       $http.post('/api/profile/', newProfile).then(
         function(res) {
           vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
           vm.profiles[vm.profiles.length - 1].user = res.data.profile.user._id;
         },
         function(res) {
-          //If fail to update, then roll back
+          // If fail to update, then roll back
           vm.profiles.pop();
         }
       );
     }
     else {
-      //Edit existing profile
-      //Backup before executing the operation
+      // Edit existing profile
+      // Backup before executing the operation
       var backup = vm.profiles;
 
-      //Local view update: update the current local data with the new updated item
+      // Local view update: update the current local data with the new updated item
       vm.profiles = vm.profiles.map(function(profile) {
           if(profile._id === vm.formProfile._id) {
               return {
@@ -141,7 +147,7 @@ angular.module('aipdatingApp')
           return profile;
       });
 
-      //Database call: call http.put to update into database
+      // Database call: call http.put to update into database
       $http.put('/api/profile/' + vm.formProfile._id, {
         nickname: vm.formProfile.nickname,
         age: vm.formProfile.age,
@@ -151,22 +157,25 @@ angular.module('aipdatingApp')
         gender: vm.formProfile.gender
       }).then(
         function(res) {
-          //successful
+          // Successful
         },
         function(err) {
-          //error returned from server
+          // Error then roll back the update
           vm.profiles = backup;
         }
       );
     }
-    //Clear the form after finishing operation
+    // Clear the form after finishing operation
     vm.clear();
     vm.isEdit = false;
   }
 
-  //This function to delete the item in the database
+  /**
+   * This function deletes Profile
+   * @return none
+   */
   vm.delete = function(index) {
-      //Backup before executing the operation
+      // Backup before executing the operation
       var backup = vm.profiles;
       var deleteId = vm.profiles[index]._id;
       vm.profiles = vm.profiles.filter(function(profile, profileIndex) {
@@ -174,12 +183,15 @@ angular.module('aipdatingApp')
       });
       $http.delete('/api/profile/'+ deleteId).then(function(res) {
       }, function(res) {
-          //If fail to update, roll back
+          // If fail to update, roll back
           vm.profiles = backup;
       });
   }
 
-  //This function is used to move the chosen item data into the form
+  /**
+   * This function moves the selected Profile's data into the profileForm
+   * @return none
+   */
   vm.edit = function(index) {
     console.log("vm edit is call");
       vm.isEdit = true;
@@ -196,7 +208,4 @@ angular.module('aipdatingApp')
       }
   }
 
-  vm.close = function() {
-    vm.isEdit = false;
-  }
 });

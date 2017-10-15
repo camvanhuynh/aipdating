@@ -4,6 +4,10 @@ angular.module('aipdatingApp')
     var vm = this;
     vm.registrationForm = {};
 
+    /**
+     * Send the credentials to the server for user registration
+     * @return none
+     */
     vm.submit = function(isValid) {
       if(isValid) {
         authentication.register(vm.registrationForm).then(

@@ -1,3 +1,5 @@
+// Gulp file for task runner
+// Automatically watch changes of javascript file, re-build
 var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
@@ -13,17 +15,15 @@ gulp.task('building scripts', function() {
     .pipe(plumber({
       errorHandler: function(err) {
         gutil.beep();
-        //console.log(err);
       }
     }))
     .pipe(sourcemaps.init())
     .pipe(concat('./app.min.js'))
     //.pipe(annotate())
-    /*
+/*
         .pipe(uglify({
           mangle: true
-        }))*/
-    //.pipe(gulp.dest('./public'))
+        })) */
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public'));
 });

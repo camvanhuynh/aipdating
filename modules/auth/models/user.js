@@ -1,4 +1,4 @@
-//Profile schema for MongoDB
+// User schema for user account
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs');
 
@@ -33,7 +33,7 @@ var UserSchema = mongoose.Schema({
   timestamps: true
 });
 
-//Before save profile into database, hash password first
+// Before save profile into database, hash password first
 UserSchema.pre('save', function(next) {
   const user = this;
   const saltRound = 5;
@@ -51,7 +51,7 @@ UserSchema.pre('save', function(next) {
   });
 });
 
-//Compare password when user enters password to login
+// Compare password when user enters password to login
 UserSchema.methods.verifyPassword = function(enteredPassword, callback) {
   bcrypt.compare(enteredPassword, this.password, function(err, res) {
     if(err) {

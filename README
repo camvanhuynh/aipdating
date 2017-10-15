@@ -8,7 +8,7 @@ Release Notes:
    - Cam Van Huynh
    - Sushmita Mondal
 
- * Last build update: 27 August 2017
+ * Last build update: 16 October 2017
 
 
 Installation / Development Instructions:
@@ -30,10 +30,9 @@ Installation / Development Instructions:
  * To develop and debug locally, perform the following steps:
    - If not running already, set the MongoDB server to run on the local machine
      > e.g. on Ubuntu, execute the command "sudo service mongod start"
-   - Execute nodejs for the javascript file server.js, this will set the local machine to
-     listen for incoming traffic on port 3009
+   - Execute nodejs for the javascript file server.js
    - Open all .html and .js files using any text editor and modify the code to suit
-   - To debug, run the URL localhost:3009 on any internet web browser in debug mode and view
+   - To debug, run the URL localhost:<running port> on any internet web browser in debug mode and view
      the console logs to diagnose
 
 Dependencies:
@@ -41,7 +40,6 @@ Dependencies:
    - npm install
    - npm update
    - npm run build
-   - npm install weather-js
 
 Unit Test Code:
 
@@ -80,5 +78,5 @@ Coding Reference Guide:
     * Package name: lowerCamelCase
     * Class name: Class, interface, record, and typedef names are written in UpperCamelCase
     * Method name: lowerCamelCase
-    * Constant names use CONSTANT_CASE: all uppercase letters, use underscores to separate words
+    * Constant names use lowerCamelCase
     * Parameter name: lowerCamelCase

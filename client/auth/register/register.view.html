@@ -23,8 +23,8 @@
       <label for="name" class="col-sm-4 control-label">Name</label>
       <div class="col-sm-4">
         <input name="name" id="name" type="text" class="form-control"
-               required placeholder="Your first name"  ng-model="vm.registrationForm.name" ng-maxlength="50" ng-pattern="/^[a-zA-Z]+$/">
-        <span ng-show="registrationForm.name.$invalid && registrationForm.name.$dirty" style="color:red">Your name can only contain upper or lowercase letters</span>
+               required placeholder="Your first name"  ng-model="vm.registrationForm.name" ng-maxlength="50" ng-pattern="/^[a-zA-Z ]+$/">
+        <span ng-show="registrationForm.name.$invalid && registrationForm.name.$dirty" style="color:red">Your name can only contain space, upper or lowercase letters</span>
         <span ng-show="registrationForm.name.$error.maxlength" style="color:red">Your name cannot contains more than 50 characters</span>
       </div>
     </div>

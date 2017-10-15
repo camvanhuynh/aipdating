@@ -1,3 +1,4 @@
+// Angular front-end routing
 angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $locationProvider) {
   $routeProvider.when('/', {
     templateUrl: '/profile/profile.view.html',
@@ -19,8 +20,6 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     authorize: true
   }).when('/register-success', {
     templateUrl: '/auth/register/register.success.html',
-    //controller: 'RegisterCtrl',
-    //controllerAs: 'vm',
   }).when('/logout', {
     template: '',
     controller: 'logoutCtrl',
@@ -31,6 +30,8 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   $http.defaults.headers.common['Authorization'] = authentication.getToken();
 
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
+
+    // Check if the destinations path needs authorization
     if(to.authorize === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {

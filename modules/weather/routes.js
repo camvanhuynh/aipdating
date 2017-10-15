@@ -1,3 +1,4 @@
+// Routing of weather service
 var router = require('express').Router(),
     WeatherController = require('./controllers/weather');
 

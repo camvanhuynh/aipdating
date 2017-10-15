@@ -4,7 +4,7 @@
   reference external script files as necessary to enact upon each request.
 */
 
-//System references and dependencies.
+// System references and dependencies.
 var express = require('express'),
     path = require('path'),
     app = new express(),
@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-//Execution of the server: continuously listen on the defined port.
+// Execution of the server: continuously listen on the defined port.
 app.listen(config.serverPort, function() {
     console.log(`APIDating v3 is listening on port: ${config.serverPort}`);
     mongoose.connect(config.dbURL, { useMongoClient: true }, function(err) {

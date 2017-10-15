@@ -6,11 +6,11 @@
   <ul class="nav navbar-nav">
     <li class="active">Welcome {{vm.currentUser}}</li>
   </ul>
-  <a href='#!/logout'> : Log Out</a>
+  <a href='#!/logout'>:::::::::Log Out</a>
 </div>
 
-<div class="text-right" style="margin: 10px">The current temperature in Sydney is: {{vm.temperature}}C</div>
-
+<div class="text-right" style="margin: 10px" ng-if="vm.temperature !== -100">The current temperature in Sydney is: {{vm.temperature}}C</div>
+<div class="text-right" style="margin: 10px" ng-if="vm.temperature === -100">The current temperature in Sydney is: Not Available</div>
 <div class="container">
   <!--<h2 class="text-center">Profile Management</h2>-->
   <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()">
