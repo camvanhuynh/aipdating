@@ -3,6 +3,7 @@
 
 module.exports = {
   dbURL: process.env.MONGODB_URL || 'mongodb://localhost/aip',
+  darksky: process.env.DARKSKY_KEY || '8eb186f7cb40b684c2f879c59619775b',
   serverPort: process.env.PORT || 5000,
   secret: 'secret key for aipdating',
   text: {
