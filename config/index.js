@@ -2,7 +2,7 @@
 // CONSTANT defined
 
 module.exports = {
-  dbURL: process.env.MONGODB_URL || 'mongodb://localhost/aip',
+  dbURL: process.env.MONGOLAB_URI || 'mongodb://localhost/aip',
   serverPort: process.env.PORT || 5000,
   secret: 'secret key for aipdating',
   text: {
