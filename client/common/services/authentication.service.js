@@ -44,23 +44,15 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
   function login(candidateUser) {
     return $http.post('/auth/login', candidateUser).then(
       function(res) {
-        console.log(res);
         storeToken(res.data.user, res.data.token);
-      },
-      function(err) {
-        alert(err.data.error);
-        //something wrong!
       }
     );
   }
 
   function register(user) {
-    return $http.post('/auth/register',user).then(
+    return $http.post('/auth/register', user).then(
       function(res) {
         storeToken(res.data.user, res.data.token);
-      },
-      function(err) {
-        //something wrong!
       }
     );
   }

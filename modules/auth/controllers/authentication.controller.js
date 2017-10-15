@@ -20,14 +20,17 @@ function generateToken(user) {
 
 function checkValidity(user) {
   var error = '';
-  if(!user.email )
+  if(!user.email) {
     error = config.text.emptyEmailError + '\n';
+  }
 
-  if(!user.password)
+  if(!user.password) {
     error += config.text.emptyPwdError + '\n';
+  }
 
-  if(!user.name)
+  if(!user.name) {
     error += config.text.emptyNameError + '\n';
+  }
 
   return error;
 }
@@ -49,13 +52,14 @@ exports.register = function (req, res, next) {
   });
 
   var error = checkValidity(user);
-  if(error)
+  if(error) {
     return res.status(422).send({ error: error});
+  }
 
   User.findOne({ email: user.email }, function(err, result) {
     if(err) {
       //something wrong with the database
-      return res.status(422).send({ error: config.text.systemError});
+      return res.status(422).send({ error: config.text.systemError });
     }
     if(result) {
       //the email has existed
@@ -63,7 +67,7 @@ exports.register = function (req, res, next) {
     }
     user.save(function(err, user) {
       if (err) {
-        return res.status(422).send({ error: 'System Error'});
+        return res.status(422).send({ error: config.text.systemError });
       }
       const userInfo = getUserInfo(user);
       res.status(201).json({

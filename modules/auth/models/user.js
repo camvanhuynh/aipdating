@@ -43,8 +43,9 @@ UserSchema.pre('save', function(next) {
   };
 
   bcrypt.hash(user.password, bcrypt.genSaltSync(saltRound), null, function(err, hash) {
-    if(err)
+    if(err) {
       return next(err);
+    }
     user.password = hash;
     next();
   });

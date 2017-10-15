@@ -4,14 +4,17 @@ angular.module('aipdatingApp')
     var vm = this;
     vm.registrationForm = {};
 
-    vm.submit = function() {
-      authentication.register(vm.registrationForm).then(
-        function() {
-          $location.path('register-success');
-        },
-        function (err) {
-          alert(err);
-        }
-      );
+    vm.submit = function(isValid) {
+      if(isValid) {
+        authentication.register(vm.registrationForm).then(
+          function() {
+            console.log('register right');
+            $location.path('register-success');
+          },
+          function (err) {
+            vm.error = err.data.error;
+          }
+        );
+      }
     }
   });

@@ -1,7 +1,7 @@
 {
   "name": "myapp",
   "version": "1.0.0",
-  "description": "my first app with Express",
+  "description": "aipdating app for Assignment 3",
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
@@ -20,6 +20,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
+    "request-promise": "^4.2.2",
     "weather-js": "^2.0.0"
   },
   "devDependencies": {
@@ -39,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/camvanhuynh/Profiles_managements"
+    "url": "https://github.com/camvanhuynh/aipdating"
   },
   "keywords": [
     "node",

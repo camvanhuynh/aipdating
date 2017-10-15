@@ -11,14 +11,15 @@ const config = require('../config');
 //Local login with email and password
 passport.use(new Local({usernameField: 'email'},function(email, password, done) {
   User.findOne({ email: email }, function(err, user) {
-    if (err)
+    if (err) {
       return done(err);
+    }
 
     //Email is unregistered
-    if (!user)
+    if (!user) {
       return done(null, false, { error: config.text.unregisteredEmail });
+    }
 
-    //
     user.verifyPassword(password, function(err, res) {
       if (err) {
         return done(err);
@@ -40,8 +41,9 @@ const options = {
 // token login
 passport.use(new JWT(options, function(payload, done) {
   User.findOne({ _id: payload._id }, function(err, user) {
-    if (err)
+    if (err) {
       return done(err, null);
+    }
 
     if (!user) {
       return done(null, false);

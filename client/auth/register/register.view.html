@@ -1,12 +1,12 @@
 <!-- View of Register -->
 <div class="">
   <h2>AIP DATING</h2>
-  <form name="registrationForm" class="form-horizontal" ng-submit="vm.submit()">
+  <form name="registrationForm" class="form-horizontal" ng-submit="vm.submit(registrationForm.$valid)">
     <div class="form-group">
       <label for="email" class="col-sm-4 control-label">Email</label>
       <div class="col-sm-4">
         <input name="email" id="email" type="email" class="form-control"
-               required placeholder="Your email address" ng-model="vm.registrationForm.email" required>
+               required placeholder="Your email address" ng-model="vm.registrationForm.email">
         <span ng-show="registrationForm.email.$error.email" style="color:red">Please enter a valid email address</span>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <label for="password" class="col-sm-4 control-label">Password</label>
       <div class="col-sm-4">
         <input name="password" id="password" type="password" class="form-control"
-               required placeholder="Your password"  ng-model="vm.registrationForm.password" ng-Minlength="3" ng-Maxlength="15" ng-pattern="/^[a-zA-Z0-9#%!*_-]+$/" required>
+               required placeholder="Your password"  ng-model="vm.registrationForm.password" ng-minlength="3" ng-maxlength="15" ng-pattern="/^[a-zA-Z0-9#%!*_-]+$/">
 
         <span ng-show="registrationForm.password.$invalid && registrationForm.password.$dirty" style="color:red">Password must be 3-15 character long. Only letters, numbers and the following characters # * % _ - ! are allowed</span>
       </div>
@@ -23,17 +23,19 @@
       <label for="name" class="col-sm-4 control-label">Name</label>
       <div class="col-sm-4">
         <input name="name" id="name" type="text" class="form-control"
-               required placeholder="Your first name"  ng-model="vm.registrationForm.name" ng-Maxlength="50" ng-pattern="/^[a-zA-Z]+$/" required>
+               required placeholder="Your first name"  ng-model="vm.registrationForm.name" ng-maxlength="50" ng-pattern="/^[a-zA-Z]+$/">
         <span ng-show="registrationForm.name.$invalid && registrationForm.name.$dirty" style="color:red">Your name can only contain upper or lowercase letters</span>
         <span ng-show="registrationForm.name.$error.maxlength" style="color:red">Your name cannot contains more than 50 characters</span>
       </div>
     </div>
+    <div class="error" ng-if="vm.error">{{vm.error}}</div>
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-4">
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <button type="submit" ng-disabled="registrationForm.$invalid" class="btn btn-primary btn-block">Register</button>
       </div>
     </div>
     <div class="">
-      Already have an account?<a href="#/login">Log In now</a>
+      Already have an account?<a href="#!/login">Log In now</a>
     </div>
+  </form>
 </div>

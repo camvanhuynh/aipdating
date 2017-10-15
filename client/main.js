@@ -31,7 +31,6 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   $http.defaults.headers.common['Authorization'] = authentication.getToken();
 
   $rootScope.$on('$routeChangeStart', function(event, to, from) {
-
     if(to.authorize === true) {
       to.resolve = to.resolve || {};
       to.resolve.auth = function(authentication) {
@@ -55,5 +54,4 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
   };
 
   AuthenticationError.prototype.constructor = AuthenticationError;
-
 });

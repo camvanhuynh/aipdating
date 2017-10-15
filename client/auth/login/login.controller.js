@@ -4,16 +4,22 @@ angular.module('aipdatingApp')
     var vm = this;
     vm.formLogin = {};
 
-    vm.submit = function () {
-      authentication.login(vm.formLogin).then(
-        function() {
-          $location.path('profile');
-        },
-        function (err) {
-          vm.isError = true;
-          vm.error = err.data.error;
-          console.log("weirdddddddd")
-        }
-      );
+    /**
+     * Send the credentials to the server for authentication
+     * @return none
+     */
+    vm.submit = function (isValid) {
+      console.log(isValid);
+      if(isValid) {
+        authentication.login(vm.formLogin).then(
+          function() {
+            //Redirect to profile page at login success
+            $location.path('profile');
+          },
+          function (err) {
+            vm.error = err.data.error;
+          }
+        );
+      }
     };
   });

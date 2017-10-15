@@ -1,16 +1,19 @@
 // Controller of Profile list view
 
 angular.module('aipdatingApp')
-    .controller('ProfileCtrl', function($http, authentication) {
+    .controller('ProfileCtrl', function($http, authentication, Weather) {
 
   // Profile holder
   var vm = this;
 
   vm.formProfile = {};
   vm.profileEval = [];
-  vm.weather = "Unknown";
-  vm.temperature = "Uknown";
   vm.isAdmin = false;
+
+  vm.temperature = 0;
+  Weather.getTemperature(function(temperature) {
+    vm.temperature = temperature;
+  });
 
   var extended = {
     nickname: "",
@@ -23,23 +26,12 @@ angular.module('aipdatingApp')
      vm.isAdmin = true;
 
   vm.currentUser = authentication.currentUser().name;
-  $http.get('/api/profile/', {
-    headers: {
-      Authorization: authentication.getToken()
-    }
-  }).then(function(res) {
+  $http.get('/api/profile/').then(function(res) {
     vm.profiles = res.data;
     // initialise the default evaluation of matches
     vm.profileEval = [];
     for(i = 0; i < vm.profiles.length; i++)
       vm.profileEval.push(extended);
-  });
-
-  // get the current weather from the server
-  $.getJSON('weather.json', {}, function(data) {
-    console.log(data[0]["current"]);  // there's a nice array of info in here
-    vm.weather = data[0]["current"].skytext;
-    vm.temperature = data[0]["current"].temperature;
   });
 
   vm.match = function() {

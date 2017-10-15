@@ -1,8 +1,7 @@
-//This javascript file
-
 var router = require('express').Router(),
     Profile = require('./models/profile'),
     ProfileController = require('./controllers/profile.controller'),
+    config = require('../../config/')
     passport = require('../../config/passport');
 
 const requireAuth = function(checkOwner = false) {
@@ -13,10 +12,10 @@ const requireAuth = function(checkOwner = false) {
       { session: false },
       function(err, user) {
         if(err) {
-          return res.status(422).send({error: 'System Error'});
+          return res.status(422).send({error: config.text.systemError });
         }
         if(!user) {
-          return res.status(401).send({error: "User not recognized"});
+          return res.status(401).send({error: config.text.unregisteredEmail });
         }
         if(checkOwner) {
           Profile.findOne({
@@ -26,10 +25,10 @@ const requireAuth = function(checkOwner = false) {
 
             }
             if(!profile) {
-              return res.status(422).send({error: 'Profile not exist'});
+              return res.status(422).send({error: config.text.unExistingProfile });
             }
             if(profile.user.toString() !== user._id.toString()) {
-              return res.status(403).send({error: "You are not allowed to do"});
+              return res.status(403).send({error: config.text.unAuthorizationError });
             }
           });
         }

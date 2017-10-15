@@ -2,15 +2,14 @@ var Profile = require('../models/profile');
 
 exports.list = function(req, res) {
   Profile.find({}, function(err, profiles) {
-    if(err)
+    if(err) {
       return res.send(err);
+    }
     res.json(profiles);
   });
 };
 
 exports.add = function(req, res) {
-  console.log("POST is CALLLING");
-  //
   var profile = new Profile({
     nickname: req.body.nickname,
     age: req.body.age,
@@ -21,11 +20,8 @@ exports.add = function(req, res) {
     user: req.user
   });
 
-  console.log(profile);
-
   profile.save(function(err, insertedProfile) {
     if(err) {
-      console.log("ERRORRRRRRR is " + err);
       return res.status(400).send({
         message: err
       })

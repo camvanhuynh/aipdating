@@ -13,5 +13,7 @@ module.exports = {
     unregisteredEmail: 'We don\'t recognize that email. Please Sign Up if you don\'t have an account.',
     unmatchedPwd: 'Password is incorrect.',
     systemError: 'System Error',
+    unAuthorizationError: 'You are not authorized to perform that action',
+    unExistingProfile: 'Profile does not exist',
   }
 };
