@@ -57,6 +57,11 @@ exports.add = function(req, res) {
     user: req.user
   });
 
+  var error = checkValidity(profile);
+  if(error) {
+    return res.status(422).send({ error: error});
+  }
+
   // Nickname is unique
   Profile.findOne({ nickname: profile.nickname }, function(err, result) {
     if(err) {
