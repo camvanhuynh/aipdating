@@ -37,47 +37,6 @@ angular.module('aipdatingApp')
       vm.profileEval.push(extended);
   });
 
-  vm.match = function() {
-    var valid =
-      vm.formProfile.state &&
-      vm.formProfile.age &&
-      vm.formProfile.gender;
-    if(valid) {
-      vm.profileEval = [];
-
-      for(i = 0; i < vm.profiles.length; i++) {
-        extended.nickname = vm.profiles[i].nickname;
-        extended._id = vm.profiles[i]._id;
-        console.log(vm.profiles[i].gender);
-
-        // TODO: NEED TO GET THE FOLLOWING FROM THE WEB SERVER - THE BROWSER HATES THIS CODE]
-        // get the distance from the maps web service
-        //var origins = vm.formProfile.suburb.replace(" ", "+") + "," + vm.formProfile.state;
-        //var destinations = vm.profiles[i].suburb.replace(" ", "+") + "," + vm.profiles[i].state;
-        //var url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&" +
-        //  "origins=" + origins + "&destinations=" + destinations;
-        //$.getJSON(url, function(data) {
-        //		console.log(data);
-        //	});
-        extended.distance = "TBD";  // not supported yet
-
-        // evaluate the match
-        if(vm.formProfile.state != vm.profiles[i].state)
-          extended.match = "Wrong state";
-        else if(vm.formProfile.gender == vm.profiles[i].gender)
-          extended.match = "Wrong gender";
-        else if(Math.abs(vm.formProfile.age - vm.profiles[i].age) > 10)
-          extended.match = "Age gap.";
-        else
-          extended.match = "YES!!!";
-
-        // add to the bound list data
-        vm.profileEval.push(extended);
-      }
-    }
-    else
-      window.alert("Please fill in the state, age and gender fields.");
-  }
 
   vm.clear = function() {
     vm.formProfile = {};
