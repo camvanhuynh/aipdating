@@ -1,6 +1,6 @@
 // Controller of Profile list view
 angular.module('aipdatingApp')
-    .controller('ProfileCtrl', function($http, authentication, Weather) {
+    .controller('ProfileCtrl', function($http, authentication, Weather, $scope) {
 
   // Profile holder
   var vm = this;
@@ -81,6 +81,9 @@ angular.module('aipdatingApp')
 
   vm.clear = function() {
     vm.formProfile = {};
+    $scope.profileForm.$setPristine();
+    $scope.profileForm.$setUntouched();
+    vm.error = '';
   }
 
   vm.isOwner = function(profile) {
@@ -93,81 +96,83 @@ angular.module('aipdatingApp')
    * otherwise, this is the Edit operation to the current profile of that id
    * @return none
    */
-  vm.submit = function() {
-
-    // Add new profile
-    if(!vm.formProfile._id) {
-      // Check "Male" radio button for default
-      if(vm.formProfile.gender == null){
-        vm.formProfile.gender = "Male";
-      }
-
-      var newProfile = {
-        nickname: vm.formProfile.nickname,
-        age: vm.formProfile.age,
-        interest: vm.formProfile.interest,
-        suburb: vm.formProfile.suburb,
-        state: vm.formProfile.state,
-        gender: vm.formProfile.gender
-      };
-
-      // Attempt to add new profile first
-      vm.profiles.push(newProfile);
-      // Database call: then call http.post to add into database
-      $http.post('/api/profile/', newProfile).then(
-        function(res) {
-          vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
-          vm.profiles[vm.profiles.length - 1].user = res.data.profile.user._id;
-        },
-        function(res) {
-          // If fail to update, then roll back
-          vm.profiles.pop();
-        }
-      );
-    }
-    else {
-      // Edit existing profile
-      // Backup before executing the operation
-      var backup = vm.profiles;
-
-      // Local view update: update the current local data with the new updated item
-      vm.profiles = vm.profiles.map(function(profile) {
-          if(profile._id === vm.formProfile._id) {
-              return {
-                nickname: vm.formProfile.nickname,
-                age: vm.formProfile.age,
-                suburb: vm.formProfile.suburb,
-                state: vm.formProfile.state,
-                interest: vm.formProfile.interest,
-                gender: vm.formProfile.gender,
-                user: vm.formProfile.user,
-                _id: vm.formProfile._id
-              };
+  vm.submit = function(isValid) {
+    if(isValid) {
+        // Add new profile
+        if(!vm.formProfile._id) {
+          // Check "Male" radio button for default
+          if(vm.formProfile.gender == null){
+            vm.formProfile.gender = "Male";
           }
-          return profile;
-      });
 
-      // Database call: call http.put to update into database
-      $http.put('/api/profile/' + vm.formProfile._id, {
-        nickname: vm.formProfile.nickname,
-        age: vm.formProfile.age,
-        interest: vm.formProfile.interest,
-        suburb: vm.formProfile.suburb,
-        state: vm.formProfile.state,
-        gender: vm.formProfile.gender
-      }).then(
-        function(res) {
-          // Successful
-        },
-        function(err) {
-          // Error then roll back the update
-          vm.profiles = backup;
+          var newProfile = {
+            nickname: vm.formProfile.nickname,
+            age: vm.formProfile.age,
+            interest: vm.formProfile.interest,
+            suburb: vm.formProfile.suburb,
+            state: vm.formProfile.state,
+            gender: vm.formProfile.gender
+          };
+
+          // Attempt to add new profile first
+          vm.profiles.push(newProfile);
+          // Database call: then call http.post to add into database
+          $http.post('/api/profile/', newProfile).then(
+            function(res) {
+              vm.profiles[vm.profiles.length - 1]._id = res.data.profile._id;
+              vm.profiles[vm.profiles.length - 1].user = res.data.profile.user._id;
+            },
+            function(err) {
+              // If fail to update, then roll back
+              vm.profiles.pop();
+              vm.error = err.data.error;
+            }
+          );
         }
-      );
+        else {
+          // Edit existing profile
+          // Backup before executing the operation
+          var backup = vm.profiles;
+
+          // Local view update: update the current local data with the new updated item
+          vm.profiles = vm.profiles.map(function(profile) {
+              if(profile._id === vm.formProfile._id) {
+                  return {
+                    nickname: vm.formProfile.nickname,
+                    age: vm.formProfile.age,
+                    suburb: vm.formProfile.suburb,
+                    state: vm.formProfile.state,
+                    interest: vm.formProfile.interest,
+                    gender: vm.formProfile.gender,
+                    user: vm.formProfile.user,
+                    _id: vm.formProfile._id
+                  };
+              }
+              return profile;
+          });
+
+          // Database call: call http.put to update into database
+          $http.put('/api/profile/' + vm.formProfile._id, {
+            nickname: vm.formProfile.nickname,
+            age: vm.formProfile.age,
+            interest: vm.formProfile.interest,
+            suburb: vm.formProfile.suburb,
+            state: vm.formProfile.state,
+            gender: vm.formProfile.gender
+          }).then(
+            function(res) {
+              // Successful
+            },
+            function(err) {
+              // Error then roll back the update
+              vm.profiles = backup;
+            }
+          );
+        }
+        // Clear the form after finishing operation
+        vm.clear();
+        vm.isEdit = false;
     }
-    // Clear the form after finishing operation
-    vm.clear();
-    vm.isEdit = false;
   }
 
   /**

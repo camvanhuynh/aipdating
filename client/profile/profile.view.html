@@ -13,40 +13,50 @@
 <div class="text-right" style="margin: 10px" ng-if="vm.temperature === -100">The current temperature in Sydney is: Not Available</div>
 <div class="container">
   <!--<h2 class="text-center">Profile Management</h2>-->
-  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit()">
+  <form name="profileForm" class="form-horizontal" ng-submit="vm.submit(profileForm.$valid)">
     <div class="form-group">
       <label for="nickname" class="col-sm-2 control-label">Nickname</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" name="nickname" id="nickname"
-               required placeholder="Your nickname" ng-model="vm.formProfile.nickname">
+               required placeholder="Your nickname" ng-model="vm.formProfile.nickname" ng-maxlength="20" ng-pattern="/^[a-zA-Z0-9 ]+$/">
+        <span ng-show="profileForm.nickname.$dirty && profileForm.nickname.$invalid" style="color:red">Nickname must be at most 20 character long, contain only uppercase, lowercase letter, number or space</span>
+        <span ng-show="profileForm.nickname.$touched && profileForm.nickname.$error.required" style="color:red">Nickname cannot be empty</span>
       </div>
     </div>
     <div class="form-group">
       <label for="age" class="col-sm-2 control-label">Age</label>
       <div class="col-sm-6">
         <input type="number" class="form-control" name="age" id="age"
-               required placeholder="Age"  ng-model="vm.formProfile.age" min="18" max="120">
+               required placeholder="Age"  ng-model="vm.formProfile.age" ngmin="18" max="120">
+        <span ng-show="profileForm.age.$dirty && profileForm.age.$invalid" style="color:red">Age must be in range 18 - 120</span>
+        <span ng-show="profileForm.age.$touched && profileForm.age.$error.required" style="color:red">Age cannot be empty</span>
       </div>
     </div>
     <div class="form-group">
       <label for="interest" class="col-sm-2 control-label">Interests</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" name="interest" id="interest"
-               required placeholder="Your interest"  ng-model="vm.formProfile.interest">
+               required placeholder="Your interest"  ng-model="vm.formProfile.interest" ng-pattern="/^[!.#^%*-_A-Za-z0-9 ]+$/">
+        <span ng-show="profileForm.interest.$dirty && profileForm.interest.$invalid" style="color:red">Only letters, number and these special characters !.#^%*-_ are allowed</span>
+        <span ng-show="profileForm.interest.$touched && profileForm.interest.$error.required" style="color:red">Interest cannot be empty</span>
       </div>
     </div>
 	<div class="form-group">
       <label for="suburb" class="col-sm-2 control-label">Suburb</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" name="suburb" id="suburb"
-               required placeholder="Your suburb" ng-model="vm.formProfile.suburb">
+               required placeholder="Your suburb" ng-model="vm.formProfile.suburb" ng-maxlength=50 ng-pattern="/^[A-Za-z ]+$/">
+        <span ng-show="profileForm.suburb.$dirty && profileForm.suburb.$invalid" style="color:red">Only letters and space are allowed</span>
+        <span ng-show="profileForm.suburb.$touched && profileForm.suburb.$error.required" style="color:red">Suburb cannot be empty</span>
       </div>
     </div>
 	<div class="form-group">
       <label for="state" class="col-sm-2 control-label">State</label>
       <div class="col-sm-6">
         <input type="text" class="form-control" name="state" id="state"
-               required placeholder="Your state" ng-model="vm.formProfile.state">
+               required placeholder="Your state" ng-model="vm.formProfile.state" ng-maxlength=50 ng-pattern="/^[A-Za-z ]+$/">
+        <span ng-show="profileForm.state.$dirty && profileForm.state.$invalid" style="color:red">Only letters and space are allowed</span>
+        <span ng-show="profileForm.state.$touched && profileForm.state.$error.required" style="color:red">State cannot be empty</span>
       </div>
     </div>
 	<div class="form-group">
@@ -59,10 +69,11 @@
         <label> Female </label>
       </div>
     </div>
+    <div class="error" ng-if="vm.error" style="color:red">{{vm.error}}</div>
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-10">
         <button type="button" class="btn btn-default" ng-click="vm.clear()">Clear</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="profileForm.$invalid" ng-click="reset(form)">Submit</button>
 		<button type="button" class="btn btn-default" ng-click="vm.match()">Match</button>
       </div>
     </div>
@@ -71,9 +82,9 @@
     <h4>Dating profiles</h4>
     <p ng-if='!vm.profiles.length'>No profile available!</p>
     <div ng-if='vm.profiles.length'>
-      <label>Any: <input ng-model="search.$"></label> <br>
-      <label>Nickname only <input ng-model="search.nickname"></label><br>
-      <label>Interest only <input ng-model="search.interest"></label><br>
+      <label>Any: <input ng-model="search.$" placeholder="Search All"></label> <br>
+      <label>Nickname only <input ng-model="search.nickname" placeholder="Search by nickname"></label><br>
+      <label>Interest only <input ng-model="search.interest" placeholder="Search by interest"></label><br>
       <table class="table table-hover table-bordered table-striped">
         <thead>
           <tr>

@@ -19,23 +19,23 @@ const requireAuth = function(checkOwner = false) {
       { session: false },
       function(err, user) {
         if(err) {
-          return res.status(422).send({error: config.text.systemError });
+          return res.status(422).json({error: config.text.systemError });
         }
         if(!user) {
-          return res.status(401).send({error: config.text.unregisteredEmail });
+          return res.status(401).json({error: config.text.unregisteredEmail });
         }
         if(checkOwner) {
           Profile.findOne({
             _id: req.params.profileId
           }, function(err, profile) {
             if(err) {
-
+              return res.status(422).json({error: config.text.systemError });
             }
             if(!profile) {
-              return res.status(422).send({error: config.text.unExistingProfile });
+              return res.status(422).json({error: config.text.unExistingProfile });
             }
             if(profile.user.toString() !== user._id.toString()) {
-              return res.status(403).send({error: config.text.unAuthorizationError });
+              return res.status(403).json({error: config.text.unAuthorizationError });
             }
           });
         }

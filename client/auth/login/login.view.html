@@ -1,6 +1,7 @@
 <!-- View of Log in -->
 
 <div>
+  <h2>Welcome to AIP Dating</h2>
   <form name="loginForm" class="form-horizontal" ng-submit="vm.submit(loginForm.$valid)" novalidate>
     <div class="form-group">
       <label for="email" class="col-sm-4 control-label">Email</label>
@@ -8,7 +9,7 @@
         <input type="email" class="form-control" name="email"
                required="" placeholder="Your registered email" ng-model="vm.formLogin.email">
         <span ng-show="loginForm.email.$touched && loginForm.email.$error.email" style="color:red">Please enter a valid email address</span>
-        <span ng-show="loginForm.email.$touched && loginForm.email.$error.required" style="color:red">Email required!</span>
+        <span ng-show="loginForm.email.$touched && loginForm.email.$error.required" style="color:red">Email cannot be empty</span>
       </div>
     </div>
 
@@ -16,13 +17,12 @@
       <label for="password" class="col-sm-4 control-label">Password</label>
       <div class="col-sm-4">
         <input name="password" id="password" type="password" class="form-control"
-               required placeholder="Your password"  ng-model="vm.formLogin.password" ng-Minlength="3" ng-Maxlength="15">
-        <span ng-show="loginForm.password.$touched && loginForm.password.$error.required" style="color:red">Password required!</span>
-        <span ng-show="loginForm.password.$touched && loginForm.password.$error.minlength" style="color:red">Password must be at least 3 characters</span>
-        <span ng-show="loginForm.password.$touched && loginForm.password.$error.maxlength" style="color:red">Password cannot exceed 15 characters</span>
+               required placeholder="Your password"  ng-model="vm.formLogin.password" ng-Minlength="3" ng-Maxlength="15" ng-pattern="/^[a-zA-Z0-9#%!*_-]+$/">
+       <span ng-show="loginForm.password.$touched && loginForm.password.$error.required" style="color:red">Password cannot be empty</span>
+        <span ng-show="loginForm.password.$invalid && loginForm.password.$touched" style="color:red">Password must be 3-15 character long. Only letters, numbers and the following characters # * % _ - ! are allowed</span>
       </div>
     </div>
-    <div class="error" ng-if="vm.error">{{vm.error}}</div>
+    <div class="col-sm-4 error" ng-if="vm.error" style="color:red">{{vm.error}}</div>
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-4">
         <button type="submit" ng-disabled="loginForm.$invalid" class="btn btn-primary btn-block">Login</button>

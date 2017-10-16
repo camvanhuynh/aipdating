@@ -1,5 +1,40 @@
 // Profile controller for Profile CRUD
 var Profile = require('../models/profile');
+var config = require('../../../config/')
+
+function checkValidity(profile) {
+  var error = '';
+  if(!profile.nickname) {
+    error = config.text.emptyNicknameError + '\n';
+  }
+
+  if(!profile.age) {
+    error += config.text.emptyAgeError + '\n';
+  }
+
+  if(!profile.interest) {
+    error += config.text.emptyInterestError + '\n';
+  }
+
+  if(!profile.suburb) {
+    error += config.text.emptySuburbError + '\n';
+  }
+
+  if(!profile.state) {
+    error += config.text.emptyStateError + '\n';
+  }
+
+  if(!profile.gender) {
+    error += config.text.gender + '\n';
+  }
+
+  if(!profile.user) {
+    error += config.text.emptyOwnerError + '\n';
+  }
+
+  return error;
+}
+
 
 exports.list = function(req, res) {
   Profile.find({}, function(err, profiles) {
@@ -22,14 +57,27 @@ exports.add = function(req, res) {
     user: req.user
   });
 
-  profile.save(function(err, insertedProfile) {
+  // Nickname is unique
+  Profile.findOne({ nickname: profile.nickname }, function(err, result) {
     if(err) {
-      return res.status(400).send({
-        message: err
-      })
+      // Something wrong with the database
+      return res.status(422).send({ error: config.text.systemError });
     }
-    res.status(200).send({
-      profile: insertedProfile
+    if(result) {
+      // The nickname has existed
+      console.log("erorrrrrr: " + config.text.existingNicknameError);
+      return res.status(422).send({ error: config.text.existingNicknameError });
+    }
+
+    profile.save(function(err, insertedProfile) {
+      if(err) {
+        return res.status(400).send({
+          error: err
+        })
+      }
+      res.status(200).send({
+        profile: insertedProfile
+      });
     });
   });
 };
