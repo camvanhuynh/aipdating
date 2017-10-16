@@ -58,7 +58,6 @@ angular.module('aipdatingApp').service('authentication', function($http, $window
     return $http.post('/auth/login', candidateUser).then(
       function(res) {
         storeToken(res.data.user, res.data.token);
-        console.log(res.data.token);
       }
     );
   }

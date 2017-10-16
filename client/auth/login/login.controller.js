@@ -9,7 +9,6 @@ angular.module('aipdatingApp')
      * @return none
      */
     vm.submit = function (isValid) {
-      console.log(isValid);
       if(isValid) {
         authentication.login(vm.formLogin).then(
           function() {
