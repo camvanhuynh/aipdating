@@ -73,14 +73,14 @@ function sendPasswordEmail(email, pwd) {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'Abid.L.Arain@gmail.com',
-      pass: 'yourpassword'  // not my real password
+      user: 'aipdating2017@gmail.com',
+      pass: 'uberDating888'  // fake email password
     }
   });
 
   var message = 'Your new password is ' + pwd;
   var mailOptions = {
-    from: 'Abid.L.Arain@gmail.com',
+    from: 'aipdating2017@gmail.com',
     to: email,
     subject: 'Your AIPDating password has been reset',
     text: message
@@ -163,7 +163,7 @@ exports.register = function (req, res, next) {
   // Updating registration: password reset
   if (user.password == "RESET") {
     console.log("resetting password");
-    var pwd = generatePassword();
+    var pwd = generatePassword(10);
     user.update(
       {
         name:     user.name,
