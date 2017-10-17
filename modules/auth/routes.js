@@ -50,4 +50,7 @@ router.post('/login', checkAuth, AuthenticationController.login);
 //Registration Route
 router.post('/register', AuthenticationController.register);
 
+//Password Reset Route
+router.post('/resetpassword', AuthenticationController.resetpassword);
+
 module.exports = router;

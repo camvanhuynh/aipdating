@@ -13,6 +13,10 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     templateUrl: '/auth/register/register.view.html',
     controller: 'RegisterCtrl',
     controllerAs: 'vm',
+  }).when('/resetpassword', {
+    templateUrl: '/auth/resetpassword/resetpassword.view.html',
+    controller: 'ResetPasswordCtrl',
+    controllerAs: 'vm',
   }).when('/profile', {
     templateUrl: '/profile/profile.view.html',
     controller: 'ProfileCtrl',
@@ -20,6 +24,8 @@ angular.module('aipdatingApp', ['ngRoute']).config(function($routeProvider, $loc
     authorize: true
   }).when('/register-success', {
     templateUrl: '/auth/register/register.success.html',
+  }).when('/reset-password-success', {
+    templateUrl: '/auth/register/resetpassword.success.html',
   }).when('/logout', {
     template: '',
     controller: 'logoutCtrl',

@@ -13,7 +13,7 @@ module.exports = {
     emptyEmailError: 'Email cannot be empty',
     emptyPwdError: 'Password cannot be empty',
     emptyNameError: 'Name cannot be empty',
-    existingEmailError: 'This email is already in used',
+    existingEmailError: 'This email is already in use',
     unregisteredEmail: 'We don\'t recognize that email. Please Sign Up if you don\'t have an account.',
     unmatchedPwd: 'Password is incorrect.',
     systemError: 'System Error',
